@@ -11,7 +11,7 @@ for name in ('assets', 'cv', 'index.html', 'favicon.svg', 'vercel.json'):
         os.remove(t)
 for d in ('assets', 'cv'):
     os.makedirs(os.path.join(out, d))
-for f in ('luiz-front.webp', 'luiz-back.webp'):
+for f in ('luiz-terno.webp', 'luiz-terno-cyber.webp'):
     shutil.copy(os.path.join(root, 'assets', f), os.path.join(out, 'assets', f))
 for f in os.listdir(os.path.join(root, 'cv')):
     shutil.copy(os.path.join(root, 'cv', f), os.path.join(out, 'cv', f))
@@ -43,10 +43,10 @@ html = f'''<!doctype html>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Luiz Machado · Soluções digitais">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="assets/luiz-front.webp">
+<meta property="og:image" content="assets/luiz-terno.webp">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="assets/luiz-front.webp">
-<link rel="preload" as="image" href="assets/luiz-back.webp">
+<link rel="preload" as="image" href="assets/luiz-terno.webp">
+<link rel="preload" as="image" href="assets/luiz-terno-cyber.webp">
 {head_part}
 <style>html,body{{margin:0}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
 </head>

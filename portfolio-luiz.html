@@ -1178,19 +1178,20 @@ let fFrame=0;
 function field(){
   if(!ld.isConnected){gsap.ticker.remove(field);return}
   const now=performance.now();ripples=ripples.filter(r=>now-r.t<1600);
-  const active=ripples.length||now-fLast<700||Math.abs(shown-lastShown)>.2;
-  fFrame++;if(!active&&!(fFrame%20===0))return;if(LITE&&fFrame%2)return;
-  lastShown=shown;
+  fFrame++;if(LITE&&fFrame%2)return;
   fctx.clearRect(0,0,FWd,FHd);
-  const edge=shown/100*FWd,R=LITE?120:170;
+  const edge=shown/100*FWd,R=LITE?120:170,t=now/1000;
   for(let k=0;k<dots.length;k+=3){
-    const x=dots[k],y=dots[k+1],n=dots[k+2];
+    const n=dots[k+2],ph=n*6.283;
+    /* each dot floats on its own slow orbit, plus a soft wave sweeping across the grid */
+    const wave=Math.sin(dots[k]*.012+dots[k+1]*.008-t*1.6);
+    const x=dots[k]+Math.sin(t*(.6+n*.5)+ph)*4+wave*2.5,y=dots[k+1]+Math.cos(t*(.5+n*.4)+ph*1.3)*4+wave*2.5;
     let inf=0,dx=0,dy=0;
     if(fpx>-999){dx=x-fpx;dy=y-fpy;const d=Math.hypot(dx,dy);inf=d<R?1-d/R:0;if(inf){dx=dx/(d||1)*inf*inf*14;dy=dy/(d||1)*inf*inf*14}else{dx=dy=0}}
     let rip=0;for(const r of ripples){const age=(now-r.t)/1000,rad=age*720,d=Math.hypot(x-r.x,y-r.y),w=Math.abs(d-rad);if(w<46)rip=Math.max(rip,(1-w/46)*(1-age/1.6))}
     const filled=x<edge-n*40;
-    const a=Math.min(1,(filled?.34:.13)+inf*.85+rip*.9);
-    const sz=1.4+inf*2.6+rip*3.2+(filled?.5:0);
+    const a=Math.min(1,(filled?.34:.13)+Math.max(0,wave)*.1+inf*.85+rip*.9);
+    const sz=1.4+inf*2.6+rip*3.2+(filled?.5:0)+Math.max(0,wave)*.4;
     fctx.globalAlpha=a;fctx.fillStyle=(inf>.12||rip>.12||filled)?'#D4FF3A':'#59614A';
     fctx.fillRect(x+dx-sz/2,y+dy-sz/2,sz,sz);
   }

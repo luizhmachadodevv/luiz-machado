@@ -55,21 +55,69 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opa
 html.lite body::after{display:none}
 @keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-1%,-2%)}}
 
-/* ---------- loader ---------- */
-#loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:end start;clip-path:inset(0 0 0 0);animation:ldkill .01s 8s forwards}
+/* ---------- loader: real progress, terminal, dot field, enter button ---------- */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);clip-path:inset(0 0 0 0);animation:ldkill .01s 25s forwards;overflow:hidden}
 @keyframes ldkill{to{visibility:hidden}}
-.ld-inner{width:100%;padding-block:max(28px,env(safe-area-inset-bottom,0px));display:grid;gap:18px}
-.ld-log{font-family:var(--f-mono);font-size:12px;color:var(--mute);min-height:9em;display:flex;flex-direction:column;justify-content:flex-end}
-.ld-log p{margin:0}
-.ld-log p:last-child{color:var(--lime)}
-.ld-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
-.ld-num{font-family:var(--f-display);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(88px,22vw,320px);line-height:.8;letter-spacing:-.04em;color:var(--lime);font-variant-numeric:tabular-nums}
-.ld-tag{font-family:var(--f-mono);font-size:12px;color:var(--mute);text-align:right;text-transform:uppercase;letter-spacing:.08em}
-.ld-bar{height:2px;background:var(--line)}
-.ld-bar i{display:block;height:100%;background:var(--lime);transform-origin:left;transform:scaleX(0)}
+.ld-field{position:absolute;inset:0;width:100%;height:100%;display:block}
+#loader::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 20% 100%,rgba(10,11,8,0) 0%,rgba(10,11,8,.3) 70%,rgba(10,11,8,.85) 100%)}
+.ld-inner{position:relative;z-index:2;height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:24px;padding-block:max(22px,env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-bottom,0px));pointer-events:none}
+.ld-inner a,.ld-inner button,.ld-inner input,.ld-term,.ld-brand{pointer-events:auto}
+.ld-top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.ld-brand{display:flex;align-items:center;gap:12px}
+.ld-logo{width:clamp(64px,6.4vw,92px);height:auto;aspect-ratio:1}
+.ld-brand b{display:block;font-family:var(--f-display);font-variation-settings:'wdth' 112;font-weight:800;font-size:clamp(16px,1.4vw,20px);letter-spacing:-.01em}
+.ld-brand span{display:block;color:var(--mute);margin-top:4px;font-size:11px}
+.ld-meta{display:grid;justify-items:end;gap:6px;color:var(--mute);font-size:11px;text-align:right}
+.ld-meta b{color:var(--fg);font-weight:500}
+.ld-meta .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--lime);margin-right:8px;vertical-align:1px;animation:ldblink 1s steps(2) infinite}
+@keyframes ldblink{50%{opacity:.15}}
+.ld-mid{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);align-items:end;gap:clamp(24px,4vw,72px)}
+.ld-prep{margin:0 0 10px;color:var(--mute);font-size:12px}
+.ld-word{display:inline-block;color:var(--lime);min-width:10ch}
+.ld-num{font-family:var(--f-display);font-variation-settings:'wdth' var(--w,125);font-weight:900;font-size:clamp(84px,min(15vw,36vh),300px);line-height:.78;letter-spacing:-.045em;color:var(--lime);font-variant-numeric:tabular-nums;white-space:nowrap;user-select:none}
+.ld-num small{font-size:.28em;letter-spacing:-.02em;color:var(--fg);margin-left:.08em;vertical-align:.18em}
+.ld-term{border:1px solid var(--line);border-radius:12px;background:rgba(17,19,9,.82);overflow:hidden;font-family:var(--f-mono);font-size:12px}
+.ld-term-h{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);color:var(--mute);font-size:10px}
+.ld-term-h i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.ld-term-h i:first-child{background:var(--lime)}
+.ld-term-h span{margin-left:auto}
+.ld-log{height:11.5em;overflow:hidden;padding:12px 14px 4px;color:var(--mute);display:flex;flex-direction:column;justify-content:flex-end;line-height:1.55}
+.ld-log p{margin:0;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ld-log .ok{color:var(--lime)}
+.ld-log .me{color:var(--fg)}
+.ld-log .warn{color:#FFB547}
+.ld-prompt{display:flex;align-items:center;gap:8px;padding:8px 14px 12px;color:var(--lime)}
+.ld-prompt input{all:unset;flex:1;min-width:0;color:var(--fg);caret-color:var(--lime);font:inherit}
+.ld-prompt input::placeholder{color:#4E5541}
+.ld-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.ld-enter{all:unset;position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 30px;border-radius:99px;border:1px solid var(--line);color:var(--mute);font:600 13px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;box-sizing:border-box;min-width:min(320px,100%);justify-content:space-between;cursor:progress;transition:color .35s,border-color .35s}
+.ld-enter .fill{position:absolute;inset:0;background:rgba(212,255,58,.14);transform-origin:left;transform:scaleX(var(--p,0));transition:transform .2s linear}
+.ld-enter span,.ld-enter svg{position:relative}
+.ld-enter svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.ld-enter.ready{background:var(--lime);color:var(--lime-ink);border-color:var(--lime);cursor:pointer;box-shadow:0 0 0 0 rgba(212,255,58,.5);animation:ldpulse 2s ease-out infinite}
+.ld-enter.ready .fill{display:none}
+.ld-enter.ready:hover svg,.ld-enter.ready:focus-visible svg{transform:translateX(5px) rotate(-45deg)}
+.ld-enter.soft{color:var(--fg);border-color:var(--mute);cursor:pointer}
+@keyframes ldpulse{0%{box-shadow:0 0 0 0 rgba(212,255,58,.45)}80%,100%{box-shadow:0 0 0 22px rgba(212,255,58,0)}}
+.ld-alt{margin:0;color:var(--mute);font-size:11px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;opacity:.35;transition:opacity .5s}
+.ld-alt.on{opacity:1}
+.ld-alt a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .2s,border-color .2s}
+.ld-alt a:hover,.ld-alt a:focus-visible{color:var(--lime);border-color:var(--lime)}
+.ld-alt kbd{font:inherit;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
+.ld-hint{color:var(--mute);font-size:11px}
+@media (max-width:900px){
+  .ld-mid{grid-template-columns:1fr;align-items:end;align-content:end}
+  .ld-log{height:7.2em}
+  .ld-meta .ld-files{display:none}
+  .ld-bottom{display:grid;gap:14px}
+  .ld-enter{width:100%;height:58px}
+  .ld-hint{display:none}
+}
+@media (hover:none),(pointer:coarse){.ld-prompt{display:none}.ld-kbd{display:none}}
+html.rm .ld-enter.ready{animation:none}
 
 /* ---------- cursor ---------- */
-.cur{position:fixed;left:0;top:0;z-index:150;pointer-events:none;display:none}
+.cur{position:fixed;left:0;top:0;z-index:250;pointer-events:none;display:none}
 @media (hover:hover) and (pointer:fine){ .cur{display:block} body, a, button{cursor:none} }
 .cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--lime)}
 .cur-ring{width:40px;height:40px;margin:-20px 0 0 -20px}
@@ -163,7 +211,6 @@ body.cur-big .cur-dot{opacity:0}
 .logo .lm-logo{width:42px;height:42px}
 .logo-name{font-family:var(--f-display);font-variation-settings:'wdth' 112;font-weight:800;font-size:15px;letter-spacing:-.01em}
 @media (max-width:420px){.logo-name{display:none}}
-.ld-logo{width:clamp(84px,10vw,132px);height:auto;aspect-ratio:1}
 .foot-logo{width:56px;height:56px}
 
 /* ---------- marquee ---------- */
@@ -548,15 +595,29 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 
 
 <!-- LOADER -->
-<div id="loader" aria-hidden="true">
+<div id="loader" role="dialog" aria-modal="true" aria-label="Carregando o site de Luiz Machado">
+  <canvas class="ld-field" aria-hidden="true"></canvas>
   <div class="ld-inner wrap">
-    <svg class="lm-logo ld-logo" aria-hidden="true"></svg>
-    <div class="ld-log"></div>
-    <div class="ld-row">
-      <div class="ld-num">000</div>
-      <div class="ld-tag">Luiz Machado<br>código · dados · movimento</div>
+    <div class="ld-top">
+      <div class="ld-brand"><svg class="lm-logo ld-logo" aria-hidden="true"></svg><div><b>Luiz Machado</b><span class="mono">código · dados · movimento</span></div></div>
+      <div class="ld-meta mono"><span><i class="dot"></i>Curitiba <b class="ld-clock">--:--</b></span><span class="ld-files">arquivos <b class="ld-cnt">0/0</b></span></div>
     </div>
-    <div class="ld-bar"><i></i></div>
+    <div class="ld-mid">
+      <div>
+        <p class="ld-prep mono">Preparando <span class="ld-word">sites</span></p>
+        <div class="ld-num" aria-hidden="true">000<small>%</small></div>
+      </div>
+      <div class="ld-term">
+        <div class="ld-term-h mono"><i></i><i></i><i></i><span>luiz@portfolio ~ </span></div>
+        <div class="ld-log" role="log" aria-live="polite"></div>
+        <label class="ld-prompt"><span aria-hidden="true">&gt;</span><input class="ld-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="digite ajuda" aria-label="Terminal: digite um comando"></label>
+      </div>
+    </div>
+    <div class="ld-bottom">
+      <button class="ld-enter" type="button" aria-disabled="true"><i class="fill" aria-hidden="true"></i><span class="ld-enter-t">Carregando o site</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <p class="ld-alt mono"><span class="ld-kbd">ou aperte <kbd>Enter</kbd></span><span>ir direto para</span><a href="#servicos" data-go="#servicos">Serviços</a><a href="#projetos" data-go="#projetos">Projetos</a><a href="#contato" data-go="#contato">Contato</a></p>
+      <span class="ld-hint mono">Mexa o mouse · clique no fundo · mexa nos dreads</span>
+    </div>
   </div>
 </div>
 
@@ -1033,19 +1094,134 @@ if(!RM&&window.Lenis){
 const goTo=y=>{lenis?lenis.scrollTo(y,{duration:1.4}):scrollTo({top:y,behavior:RM?'auto':'smooth'})};
 $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=$(a.getAttribute('href'));if(!t)return;e.preventDefault();const sp=t.parentElement.classList.contains('pin-spacer')?t.parentElement:t;goTo(sp.getBoundingClientRect().top+scrollY)}));
 
-/* ---- loader ---- */
-const ld=$('#loader'),num=$('.ld-num'),bar=$('.ld-bar i'),logEl=$('.ld-log');
-const LOG=['> npm run build','[ok] compilando componentes','[ok] SELECT * FROM ideias WHERE boas = true','[ok] calculando medidas DAX','[ok] renderizando keyframes · 24fps','[ok] deploy pronto'];
-let shown=0;const c={v:0};
-gsap.to(c,{v:100,duration:RM?.3:2.4,ease:'power2.inOut',onUpdate(){
-  num.textContent=String(Math.round(c.v)).padStart(3,'0');
-  bar.style.transform=`scaleX(${c.v/100})`;
-  const n=Math.min(LOG.length,Math.floor(c.v/100*LOG.length)+1);
-  while(shown<n){const p=document.createElement('p');p.textContent=LOG[shown++];logEl.appendChild(p)}
-},onComplete:outro});
+/* ---- loader: tracks what really loads, then waits for the visitor to enter ---- */
+const ld=$('#loader');ld.style.animation='none';
+const num=$('.ld-num'),btn=$('.ld-enter'),btnT=$('.ld-enter-t'),logEl=$('.ld-log'),inp=$('.ld-input'),cntEl=$('.ld-cnt'),alt=$('.ld-alt');
+const T0=performance.now();
+const log=(t,cls)=>{const p=document.createElement('p');p.textContent=t;if(cls)p.className=cls;logEl.appendChild(p);while(logEl.children.length>14)logEl.firstChild.remove()};
+const kb=url=>{try{const e=performance.getEntriesByName(new URL(url,location.href).href)[0];const b=e&&(e.encodedBodySize||e.transferSize);return b?` · ${Math.max(1,Math.round(b/1024))} KB`:''}catch(_){return''}};
+const fname=u=>decodeURIComponent(u.split('/').pop().split('?')[0]);
+log('> npm run portfolio');
+log(`[ok] GSAP ${gsap.version} · ScrollTrigger${window.Lenis?' · Lenis':''}`,'ok');
+// everything the first screen needs: fonts, eager images, the hidden cyber photo and the window load event
+const jobs=[];let done=0;
+const ldTrack=(label,promise)=>{jobs.push(promise.then(ok=>{done++;log(typeof label==='function'?label(ok):label,ok===false?'warn':'ok')}))};
+if(document.fonts&&document.fonts.ready)ldTrack('[ok] fontes · Archivo, Geist, Geist Mono',document.fonts.ready.then(()=>true));
+const imgLoad=src=>new Promise(r=>{const im=new Image();im.onload=()=>r(true);im.onerror=()=>r(false);im.src=src});
+const seen=new Set();
+$$('img').filter(im=>im.loading!=='lazy'&&im.getAttribute('src')).forEach(im=>{const src=im.getAttribute('src');if(seen.has(src))return;seen.add(src);
+  ldTrack(ok=>ok?`[ok] ${fname(src)}${kb(src)}`:`[!!] ${fname(src)} não carregou`,im.complete&&im.naturalWidth?Promise.resolve(true):new Promise(r=>{im.addEventListener('load',()=>r(true),{once:true});im.addEventListener('error',()=>r(false),{once:true})}))});
+['assets/luiz-back.webp'].forEach(src=>{if(!seen.has(src)){seen.add(src);ldTrack(ok=>ok?`[ok] ${fname(src)}${kb(src)}`:`[!!] ${fname(src)} não carregou`,imgLoad(src))}});
+ldTrack(()=>`[ok] página completa · ${(performance.now()/1000).toFixed(1)}s`,document.readyState==='complete'?Promise.resolve(true):new Promise(r=>addEventListener('load',()=>r(true),{once:true})));
+const LDN=jobs.length;
+// rotating "preparing" word
+const WORDS=['sites','sistemas','dashboards','automações','motion','vídeos'];let wi=0;
+const wordEl=$('.ld-word');const wordTimer=setInterval(()=>{wi=(wi+1)%WORDS.length;wordEl.textContent=WORDS[wi]},RM?1400:650);
+// Curitiba clock
+const clk=$('.ld-clock');const tick=()=>{clk.textContent=new Date().toLocaleTimeString('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit'})};tick();const clkTimer=setInterval(tick,15000);
+
+let shown=0,ready=false,entered=false,dest=null,slow=false;
+const MIN=RM?.4:1.3; // never flash: the counter takes at least this long
+const setBtn=(t)=>{btnT.textContent=t};
+let pT=performance.now();
+function progress(){
+  if(!ld.isConnected)return;
+  const now=performance.now(),dt=Math.min(.5,(now-pT)/1000);pT=now;
+  const el=(now-T0)/1000;
+  const target=Math.min(done/LDN,el/MIN)*100;
+  // time-based easing, so a slow device does not drag the counter behind the real progress
+  shown+=(target-shown)*(RM?1:1-Math.exp(-dt*9));if(target-shown<.4)shown=target;
+  num.firstChild.nodeValue=String(Math.floor(shown)).padStart(3,'0');
+  btn.style.setProperty('--p',shown/100);
+  cntEl.textContent=`${done}/${LDN}`;
+  if(!ready&&done===LDN&&el>=MIN){shown=100;becomeReady()}
+  else if(!ready&&!slow&&done<LDN&&el>9){slow=true;btn.classList.add('soft');btn.setAttribute('aria-disabled','false');setBtn('Entrar mesmo assim');log('[..] conexão lenta: dá para entrar mesmo assim','warn');alt.classList.add('on')}
+}
+gsap.ticker.add(progress);
+function becomeReady(){
+  ready=true;clearInterval(wordTimer);wordEl.textContent='tudo';
+  num.firstChild.nodeValue='100';
+  log(`[ok] pronto em ${(performance.now()/1000).toFixed(1)}s · ${FINE?'aperte Enter':'toque em Entrar'}`,'ok');
+  btn.classList.remove('soft');btn.classList.add('ready');btn.setAttribute('aria-disabled','false');
+  setBtn(dest?`Entrar em ${dest.name}`:'Entrar no site');alt.classList.add('on');
+  if(!RM)gsap.fromTo(btn,{scale:.94},{scale:1,duration:.9,ease:'elastic.out(1,.45)'});
+  let again=false;try{again=sessionStorage.getItem('lm-entered')==='1'}catch(_){}
+  if(again||dest){enter();return}
+  if(FINE&&document.activeElement!==inp)btn.focus({preventScroll:true});
+}
+function enter(){
+  if(entered)return;if(!ready&&!slow)return;entered=true;
+  try{sessionStorage.setItem('lm-entered','1')}catch(_){}
+  clearInterval(clkTimer);clearInterval(wordTimer);
+  outro();
+}
+btn.addEventListener('click',enter);
+$$('[data-go]',ld).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();dest={sel:a.dataset.go,name:a.textContent};if(ready||slow)enter();else{setBtn(`Entrar em ${dest.name}`);log(`[..] assim que carregar, te levo para ${dest.name}`,'me')}}));
+addEventListener('keydown',e=>{if(!ld.isConnected||entered)return;if(e.key==='Enter'&&!(e.target.closest&&e.target.closest('a'))&&(e.target!==inp||!inp.value.trim())){e.preventDefault();enter()}});
+// the mini terminal: a few real commands
+const SECT={servicos:['#servicos','Serviços'],serviços:['#servicos','Serviços'],projetos:['#projetos','Projetos'],contato:['#contato','Contato'],historia:['#historia','História'],história:['#historia','História'],dados:['#dados','Dados']};
+inp&&inp.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;const raw=inp.value.trim();if(!raw)return;e.preventDefault();inp.value='';
+  const c=raw.toLowerCase().normalize('NFC');log('> '+raw,'me');
+  if(c==='ajuda'||c==='help'||c==='?'){log('comandos: servicos · projetos · contato · historia');log('          whatsapp · dreads · limpar · entrar');return}
+  if(SECT[c]){dest={sel:SECT[c][0],name:SECT[c][1]};if(ready||slow)enter();else{setBtn(`Entrar em ${dest.name}`);log(`[..] assim que carregar, te levo para ${dest.name}`,'me')}return}
+  if(c==='entrar'||c==='start'||c==='go'){ready||slow?enter():log('[..] calma, ainda carregando '+Math.floor(shown)+'%','warn');return}
+  if(c==='whatsapp'||c==='zap'){window.open('https://wa.me/5541987321919?text=Ol%C3%A1%20Luiz%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20quero%20conversar%20sobre%20um%20projeto.','_blank','noopener');log('[ok] abrindo o WhatsApp em outra aba','ok');return}
+  if(c==='dreads'||c==='cabelo'){LOGOS.forEach(L=>L.shake(2.4));log('[ok] balançando os dreads','ok');return}
+  if(c==='limpar'||c==='clear'){logEl.innerHTML='';return}
+  if(c==='sudo'||c.startsWith('sudo ')){log('[!!] permissão negada. mas o orçamento é grátis :)','warn');return}
+  log(`comando não encontrado: ${raw} · digite ajuda`,'warn');
+});
+if(FINE&&inp)setTimeout(()=>{if(!entered&&document.activeElement===document.body)inp.focus({preventScroll:true})},400);
+// the big number breathes with the mouse: Archivo width axis follows the pointer
+if(FINE&&!RM){addEventListener('pointermove',e=>{if(ld.isConnected)num.style.setProperty('--w',(62+63*(1-e.clientX/innerWidth)).toFixed(1))},{passive:true})}
+// magnetic enter button
+if(FINE&&!RM){const bx=gsap.quickTo(btn,'x',{duration:.5,ease:'power3'}),by=gsap.quickTo(btn,'y',{duration:.5,ease:'power3'});
+  ld.addEventListener('pointermove',e=>{const r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=Math.hypot(dx,dy);
+    if(d<r.width*.9){bx(dx*.22);by(dy*.3)}else{bx(0);by(0)}})}
+
+/* dot field: a grid that fills with lime as the site loads, lights up under the pointer and ripples on click */
+const fc=$('.ld-field'),fctx=fc.getContext('2d');let FWd=0,FHd=0,fdp=1,dots=[],ripples=[],fpx=-999,fpy=-999,fLast=0,lastShown=-1;
+const GAP=LITE?34:26;
+function fsizeL(){fdp=Math.min(devicePixelRatio||1,LITE?1:1.5);FWd=innerWidth;FHd=innerHeight;fc.width=FWd*fdp;fc.height=FHd*fdp;fctx.setTransform(fdp,0,0,fdp,0,0);
+  dots=[];const ox=(FWd%GAP)/2,oy=(FHd%GAP)/2;for(let y=oy;y<FHd;y+=GAP)for(let x=ox;x<FWd;x+=GAP)dots.push(x,y,Math.random());lastShown=-1}
+fsizeL();addEventListener('resize',()=>{if(ld.isConnected)fsizeL()});
+ld.addEventListener('pointermove',e=>{fpx=e.clientX;fpy=e.clientY;fLast=performance.now()},{passive:true});
+ld.addEventListener('pointerleave',()=>{fpx=fpy=-999;fLast=performance.now()});
+ld.addEventListener('pointerdown',e=>{if(e.target.closest('button,a,input,.ld-term'))return;ripples.push({x:e.clientX,y:e.clientY,t:performance.now()});if(ripples.length>4)ripples.shift();
+  if(!entered&&!ready)log(`[..] ${Math.floor(shown)}% · ainda carregando`,'me')});
+let fFrame=0;
+function field(){
+  if(!ld.isConnected){gsap.ticker.remove(field);return}
+  const now=performance.now();ripples=ripples.filter(r=>now-r.t<1600);
+  const active=ripples.length||now-fLast<700||Math.abs(shown-lastShown)>.2;
+  fFrame++;if(!active&&!(fFrame%20===0))return;if(LITE&&fFrame%2)return;
+  lastShown=shown;
+  fctx.clearRect(0,0,FWd,FHd);
+  const edge=shown/100*FWd,R=LITE?120:170;
+  for(let k=0;k<dots.length;k+=3){
+    const x=dots[k],y=dots[k+1],n=dots[k+2];
+    let inf=0,dx=0,dy=0;
+    if(fpx>-999){dx=x-fpx;dy=y-fpy;const d=Math.hypot(dx,dy);inf=d<R?1-d/R:0;if(inf){dx=dx/(d||1)*inf*inf*14;dy=dy/(d||1)*inf*inf*14}else{dx=dy=0}}
+    let rip=0;for(const r of ripples){const age=(now-r.t)/1000,rad=age*720,d=Math.hypot(x-r.x,y-r.y),w=Math.abs(d-rad);if(w<46)rip=Math.max(rip,(1-w/46)*(1-age/1.6))}
+    const filled=x<edge-n*40;
+    const a=Math.min(1,(filled?.34:.13)+inf*.85+rip*.9);
+    const sz=1.4+inf*2.6+rip*3.2+(filled?.5:0);
+    fctx.globalAlpha=a;fctx.fillStyle=(inf>.12||rip>.12||filled)?'#D4FF3A':'#59614A';
+    fctx.fillRect(x+dx-sz/2,y+dy-sz/2,sz,sz);
+  }
+  fctx.globalAlpha=1;
+}
+if(!RM)gsap.ticker.add(field);
+
 function outro(){
-  const tl=gsap.timeline({onComplete(){ld.remove();document.documentElement.classList.remove('is-loading');lenis&&lenis.start();ScrollTrigger.refresh()}});
-  tl.to('.ld-inner',{y:-40,opacity:0,duration:.45,ease:'power2.in'})
+  gsap.ticker.remove(progress);
+  const go=dest;
+  const tl=gsap.timeline({onComplete(){ld.remove();document.documentElement.classList.remove('is-loading');lenis&&lenis.start();ScrollTrigger.refresh();
+    if(go){const t=$(go.sel);if(t){const sp=t.parentElement.classList.contains('pin-spacer')?t.parentElement:t;const y=sp.getBoundingClientRect().top+scrollY;lenis?lenis.scrollTo(y,{duration:1.6}):scrollTo({top:y,behavior:RM?'auto':'smooth'})}}}});
+  tl.to(btn,{scale:1.06,duration:.18,ease:'power2.out'})
+    .to('.ld-inner',{y:-40,opacity:0,duration:.45,ease:'power2.in'})
+    .to(fc,{opacity:0,duration:.5},'<')
     .to(ld,{clipPath:'inset(0 0 100% 0)',duration:.9,ease:'expo.inOut'},'-=.1')
     .from('.figure',{yPercent:14,opacity:0,duration:1.4,ease:'expo.out'},'-=.55')
     .from('.hero-mq',{opacity:0,scale:1.08,duration:1.2,ease:'expo.out'},'<')

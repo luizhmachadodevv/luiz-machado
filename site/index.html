@@ -646,7 +646,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
     <div class="hrow solid"><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span></div>
   </div>
   <div class="figure" id="figure">
-    <img id="front" src="assets/luiz-front.webp" alt="Luiz Machado de óculos escuros, camiseta preta e corrente prata" width="899" height="1600" fetchpriority="high">
+    <img id="front" src="assets/luiz-front.webp" alt="Luiz Machado de terno preto, gravata e óculos escuros" width="752" height="1344" fetchpriority="high">
     <canvas id="reveal" aria-hidden="true"></canvas>
   </div>
   <p class="hint mono hero-hint-m" aria-hidden="true"><i></i><span class="hintText">Arraste para ver o que está por trás</span></p>
@@ -1099,7 +1099,7 @@ const ld=$('#loader');ld.style.animation='none';
 const num=$('.ld-num'),btn=$('.ld-enter'),btnT=$('.ld-enter-t'),logEl=$('.ld-log'),inp=$('.ld-input'),cntEl=$('.ld-cnt'),alt=$('.ld-alt');
 const T0=performance.now();
 const log=(t,cls)=>{const p=document.createElement('p');p.textContent=t;if(cls)p.className=cls;logEl.appendChild(p);while(logEl.children.length>14)logEl.firstChild.remove()};
-const kb=url=>{try{const e=performance.getEntriesByName(new URL(url,location.href).href)[0];const b=e&&(e.encodedBodySize||e.transferSize);return b?` · ${Math.max(1,Math.round(b/1024))} KB`:''}catch(_){return''}};
+const kb=url=>{try{const e=performance.getEntriesByName(new URL(url,location.href).href)[0];const b=e&&(e.decodedBodySize||e.encodedBodySize);return b>2048?` · ${Math.round(b/1024)} KB`:(e?' · cache':'')}catch(_){return''}};
 const fname=u=>decodeURIComponent(u.split('/').pop().split('?')[0]);
 log('> npm run portfolio');
 log(`[ok] GSAP ${gsap.version} · ScrollTrigger${window.Lenis?' · Lenis':''}`,'ok');

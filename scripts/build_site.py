@@ -11,7 +11,7 @@ for name in ('assets', 'cv', 'index.html', 'favicon.svg', 'vercel.json'):
         os.remove(t)
 for d in ('assets', 'cv'):
     os.makedirs(os.path.join(out, d))
-for f in ('luiz-formal.webp', 'luiz-oculos.webp'):
+for f in ('luiz-laranja.webp',):
     shutil.copy(os.path.join(root, 'assets', f), os.path.join(out, 'assets', f))
 for f in os.listdir(os.path.join(root, 'cv')):
     shutil.copy(os.path.join(root, 'cv', f), os.path.join(out, 'cv', f))
@@ -24,10 +24,10 @@ for tag in ('<meta charset="utf-8">\n', '<meta name="viewport" content="width=de
     head_part = head_part.replace(tag, '')
 head_part = head_part.replace('<title>Luiz Machado Portfolio</title>', '<title>Luiz Machado · Soluções digitais</title>')
 
-favicon = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="24" fill="#0A0B08"/>'
-           '<g fill="#D4FF3A" stroke="#0A0B08" stroke-width="2.6" paint-order="stroke">'
+favicon = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="24" fill="#0A0A0A"/>'
+           '<g fill="#FF5B1F" stroke="#0A0A0A" stroke-width="2.6" paint-order="stroke">'
            '<path d="M22 58 H40 V94 H52 V112 H22 Z"/><path d="M46 58 H57 L68 76 L79 58 H98 V112 H82 V84 L68 102 L56 84 V88 H46 Z"/></g>'
-           '<g fill="#D4FF3A">' + ''.join(
+           '<g fill="#FF5B1F">' + ''.join(
                f'<circle cx="{28+i*8}" cy="{48-abs(4-i)*-2 - (8 - abs(4-i)*2)}" r="5"/>' for i in range(9)) +
            '</g></svg>')
 open(os.path.join(out, 'favicon.svg'), 'w', encoding='utf-8').write(favicon)
@@ -39,14 +39,13 @@ html = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="{desc}">
-<meta name="theme-color" content="#0A0B08">
+<meta name="theme-color" content="#0A0A0A">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Luiz Machado · Soluções digitais">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="assets/luiz-formal.webp">
+<meta property="og:image" content="assets/luiz-laranja.webp">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="assets/luiz-formal.webp">
-<link rel="preload" as="image" href="assets/luiz-oculos.webp">
+<link rel="preload" as="image" href="assets/luiz-laranja.webp">
 {head_part}
 <style>html,body{{margin:0}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
 </head>

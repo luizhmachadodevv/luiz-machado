@@ -8,10 +8,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Luiz Machado · Soluções digitais">
 <meta property="og:description" content="Luiz Machado: sites, sistemas completos, dashboards Power BI, automações e motion design. Do briefing ao deploy, em Curitiba.">
-<meta property="og:image" content="assets/luiz-front.webp">
+<meta property="og:image" content="assets/luiz-formal.webp">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="assets/luiz-front.webp">
-<link rel="preload" as="image" href="assets/luiz-back.webp">
+<link rel="preload" as="image" href="assets/luiz-formal.webp">
+<link rel="preload" as="image" href="assets/luiz-oculos.webp">
 <title>Luiz Machado · Soluções digitais</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -646,7 +646,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
     <div class="hrow solid"><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span><span>Luiz <em>Machado</em></span></div>
   </div>
   <div class="figure" id="figure">
-    <img id="front" src="assets/luiz-front.webp" alt="Luiz Machado de óculos escuros, camiseta preta e corrente prata" width="899" height="1600" fetchpriority="high">
+    <img id="front" src="assets/luiz-formal.webp" alt="Luiz Machado de frente, de blusa cinza com zíper" width="899" height="1600" fetchpriority="high">
     <canvas id="reveal" aria-hidden="true"></canvas>
   </div>
   <p class="hint mono hero-hint-m" aria-hidden="true"><i></i><span class="hintText">Arraste para ver o que está por trás</span></p>
@@ -1103,7 +1103,7 @@ const kb=url=>{try{const e=performance.getEntriesByName(new URL(url,location.hre
 const fname=u=>decodeURIComponent(u.split('/').pop().split('?')[0]);
 log('> npm run portfolio');
 log(`[ok] GSAP ${gsap.version} · ScrollTrigger${window.Lenis?' · Lenis':''}`,'ok');
-// everything the first screen needs: fonts, eager images, the hidden cyber photo and the window load event
+// everything the first screen needs: fonts, eager images, the hidden photo under the brush and the window load event
 const jobs=[];let done=0;
 const ldTrack=(label,promise)=>{jobs.push(promise.then(ok=>{done++;log(typeof label==='function'?label(ok):label,ok===false?'warn':'ok')}))};
 if(document.fonts&&document.fonts.ready)ldTrack('[ok] fontes · Archivo, Geist, Geist Mono',document.fonts.ready.then(()=>true));
@@ -1111,7 +1111,7 @@ const imgLoad=src=>new Promise(r=>{const im=new Image();im.onload=()=>r(true);im
 const seen=new Set();
 $$('img').filter(im=>im.loading!=='lazy'&&im.getAttribute('src')).forEach(im=>{const src=im.getAttribute('src');if(seen.has(src))return;seen.add(src);
   ldTrack(ok=>ok?`[ok] ${fname(src)}${kb(src)}`:`[!!] ${fname(src)} não carregou`,im.complete&&im.naturalWidth?Promise.resolve(true):new Promise(r=>{im.addEventListener('load',()=>r(true),{once:true});im.addEventListener('error',()=>r(false),{once:true})}))});
-['assets/luiz-back.webp'].forEach(src=>{if(!seen.has(src)){seen.add(src);ldTrack(ok=>ok?`[ok] ${fname(src)}${kb(src)}`:`[!!] ${fname(src)} não carregou`,imgLoad(src))}});
+['assets/luiz-oculos.webp'].forEach(src=>{if(!seen.has(src)){seen.add(src);ldTrack(ok=>ok?`[ok] ${fname(src)}${kb(src)}`:`[!!] ${fname(src)} não carregou`,imgLoad(src))}});
 ldTrack(()=>`[ok] página completa · ${(performance.now()/1000).toFixed(1)}s`,document.readyState==='complete'?Promise.resolve(true):new Promise(r=>addEventListener('load',()=>r(true),{once:true})));
 const LDN=jobs.length;
 // rotating "preparing" word
@@ -1292,10 +1292,10 @@ gsap.ticker.add(time=>{
   pvx*=.6;pvy*=.6;
 });
 
-/* ---- hero: brush reveal (front photo -> cyber version) ---- */
+/* ---- hero: brush reveal (formal photo -> sunglasses photo) ---- */
 const heroEl=$('.hero'),fig=$('#figure'),frontImg=$('#front'),cvs=$('#reveal'),rctx=cvs.getContext('2d');
 const mask=document.createElement('canvas'),mctx=mask.getContext('2d'),buf=document.createElement('canvas'),bctx=buf.getContext('2d');
-const backImg=new Image();let backReady=false,frontReady=false;backImg.onload=()=>{backReady=true};backImg.src='assets/luiz-back.webp';
+const backImg=new Image();let backReady=false,frontReady=false;backImg.onload=()=>{backReady=true};backImg.src='assets/luiz-oculos.webp';
 let FW=0,FH=0,fdpr=1,stamps=[],last=null,lastMove=0,autoT=0,heroVis=true,dirty=true;
 const touchMQ=matchMedia('(hover: none), (pointer: coarse)');let coarse=touchMQ.matches;
 const syncHint=()=>{coarse=touchMQ.matches;$$('.hintText').forEach(el=>el.textContent=coarse?'Arraste para ver o que está por trás':'Passe o mouse para ver o que está por trás')};

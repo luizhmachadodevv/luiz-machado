@@ -107,8 +107,10 @@ body.cur-big .cur-dot{opacity:0}
 @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
 .hero.giro-on .giro-hint.show{opacity:1}
 .hero-social{position:absolute;z-index:6;right:max(var(--gut),env(safe-area-inset-right,0px));top:50%;translate:0 -50%;display:flex;flex-direction:column;gap:26px}
-.hero-social a{display:grid;place-items:center;width:22px;height:22px;color:#8E8E88;transition:color .25s,transform .25s var(--ease)}
-.hero-social a:hover,.hero-social a:focus-visible{color:var(--lime);transform:translateX(-3px)}
+.hero-social a{display:grid;place-items:center;width:22px;height:22px;color:#8E8E88;transition:color .25s}
+.hero-social a svg{transition:transform .25s var(--ease)}
+.hero-social a:hover,.hero-social a:focus-visible{color:var(--lime)}
+.hero-social a:hover svg,.hero-social a:focus-visible svg{transform:translateX(-3px)}
 .hero-social svg{width:20px;height:20px;display:block}
 @media (max-width:760px){.hero-social{top:auto;bottom:calc(28px + env(safe-area-inset-bottom,0px));translate:none;gap:22px}}
 .hero-copy{position:absolute;z-index:5;inset:0;display:flex;align-items:center;pointer-events:none;padding-top:40px}
@@ -173,7 +175,7 @@ body.cur-big .cur-dot{opacity:0}
 html.rm .dive-title{animation:none}
 .dive-cue{position:absolute;left:50%;bottom:calc(64px + env(safe-area-inset-bottom,0px));translate:-50% 0;z-index:2;margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;color:rgba(255,240,230,.9);font-size:10px;letter-spacing:.3em;text-shadow:0 1px 12px rgba(0,0,0,.85),0 0 3px rgba(0,0,0,.6);pointer-events:none}
 .dive-cue::after{content:"";width:1px;height:42px;background:linear-gradient(#FE5101,transparent);animation:drop 1.8s var(--ease) infinite;transform-origin:top}
-.nav,.hud{transition:opacity .6s,transform .6s}
+body.in-dive .nav,body.in-dive .hud{transition:opacity .6s,transform .6s}
 body.in-dive .nav{opacity:0;transform:translateY(-14px);pointer-events:none}
 body.in-dive .hud{opacity:0;transform:translateY(14px);pointer-events:none}
 
@@ -1537,10 +1539,11 @@ if(!RM){
     .from('.figure',{opacity:0,duration:1.6,ease:'power2.out'})
     .to(G,{intro:1,duration:1.8,ease:'power2.inOut'},'<')
     .from('.hero-glow',{opacity:0,duration:2,ease:'power2.out'},'<')
-    .from(diveOn?'.hc-left > *':'.hc-left > *, .nav',{opacity:0,y:24,duration:.9,stagger:.09,ease:'power3.out'},'<.2')
-    .from('.hero-social a',{opacity:0,x:14,duration:.7,stagger:.08,ease:'power3.out'},'<.5')
-    .from('.hc-stats > div',{opacity:0,y:30,duration:.9,stagger:.12,ease:'power3.out'},'<')
-    .from('.hero-word span',{yPercent:60,opacity:0,duration:1.4,ease:'power4.out'},'<-.6');
+    .fromTo('.hc-left > *',{opacity:0,y:24},{opacity:1,y:0,duration:.9,stagger:.09,ease:'power3.out',clearProps:'opacity,transform'},'<.2')
+    .fromTo('.nav',{opacity:0,y:-14},{opacity:1,y:0,duration:.9,ease:'power3.out',clearProps:'opacity,transform'},'<')
+    .fromTo('.hero-social a',{opacity:0,x:14},{opacity:1,x:0,duration:.7,stagger:.08,ease:'power3.out',clearProps:'opacity,transform'},'<.5')
+    .fromTo('.hc-stats > div',{opacity:0,y:30},{opacity:1,y:0,duration:.9,stagger:.12,ease:'power3.out',clearProps:'opacity,transform'},'<')
+    .fromTo('.hero-word span',{yPercent:60,opacity:0},{yPercent:0,opacity:1,duration:1.4,ease:'power4.out',clearProps:'opacity,transform'},'<-.6');
   // scroll away
   // the opening holds still for the first scroll, then winds down in place before handing over to the manifesto
   (function(){const w=$('.hero-word'),sp=w&&w.firstElementChild;if(!sp)return;

@@ -40,6 +40,25 @@ html{overflow-x:clip;background:var(--bg)}
 .amb i{position:absolute;border-radius:50%;will-change:transform}
 .amb i:nth-child(1){width:80vmax;height:80vmax;left:38%;top:-30vmax;background:radial-gradient(closest-side,rgba(254,81,1,.11),rgba(254,81,1,.04) 55%,transparent)}
 .amb i:nth-child(2){width:70vmax;height:70vmax;left:-34vmax;top:35%;background:radial-gradient(closest-side,rgba(254,81,1,.07),transparent)}
+/* the opening's light, behind the rest of the page: a flame from one top corner, crossfading side per section */
+.lit{pointer-events:none;overflow:hidden}
+.lit-fixed{position:fixed;inset:0;z-index:-1}
+.lit i{position:absolute;inset:0;opacity:0;will-change:opacity}
+.lit .l{background:
+  linear-gradient(122deg,rgba(0,0,0,0) 48%,rgba(0,0,0,.55) 58%,rgba(0,0,0,0) 74%),
+  radial-gradient(34% 50% at 22% 30%,rgba(254,81,1,.22),transparent 76%),
+  linear-gradient(122deg,#FE5101 0%,rgba(254,81,1,.82) 14%,rgba(254,81,1,.34) 32%,rgba(254,81,1,0) 50%)}
+.lit .r{background:
+  linear-gradient(238deg,rgba(0,0,0,0) 48%,rgba(0,0,0,.55) 58%,rgba(0,0,0,0) 74%),
+  radial-gradient(34% 50% at 78% 30%,rgba(254,81,1,.22),transparent 76%),
+  linear-gradient(238deg,#FE5101 0%,rgba(254,81,1,.82) 14%,rgba(254,81,1,.34) 32%,rgba(254,81,1,0) 50%)}
+@media (max-width:900px){
+  .lit .l{background:radial-gradient(70% 30% at 20% 12%,rgba(254,81,1,.3),transparent 80%),linear-gradient(160deg,#FE5101 0%,rgba(254,81,1,.5) 16%,rgba(254,81,1,0) 40%)}
+  .lit .r{background:radial-gradient(70% 30% at 80% 12%,rgba(254,81,1,.3),transparent 80%),linear-gradient(200deg,#FE5101 0%,rgba(254,81,1,.5) 16%,rgba(254,81,1,0) 40%)}
+}
+.scene-lit{display:none;position:absolute;inset:0;z-index:0}
+.services.pin .scene+.scene .scene-lit{display:block;translate:0 calc(-1 * var(--sy,0px));
+  -webkit-mask:linear-gradient(rgba(0,0,0,0),#000 16vh) 0 var(--sy,0px)/100% 100% no-repeat;mask:linear-gradient(rgba(0,0,0,0),#000 16vh) 0 var(--sy,0px)/100% 100% no-repeat}
 .amb i:nth-child(3){width:60vmax;height:60vmax;right:-30vmax;top:70%;background:radial-gradient(closest-side,rgba(254,110,40,.06),transparent)}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
@@ -102,7 +121,7 @@ body.cur-big .cur-dot{opacity:0}
   font-family:var(--f-display);font-variation-settings:'wdth' 108;font-weight:500;letter-spacing:-.03em;color:#FFFFFF;white-space:nowrap;overflow:hidden;
   font-size:var(--wfs,16vw);translate:0 9%}
 .hero-word span{display:inline-block}
-.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55));z-index:3;pointer-events:none}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14%;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.55));z-index:3;pointer-events:none;opacity:var(--shade,1)}
 .figure{--h:min(94svh,170vw);position:absolute;left:50%;translate:-50% 0;bottom:0;z-index:2;height:var(--h);width:calc(var(--h) * .75);pointer-events:none;
   -webkit-mask-image:linear-gradient(to top,transparent 0,rgba(0,0,0,.5) 12%,#000 32%);mask-image:linear-gradient(to top,transparent 0,rgba(0,0,0,.5) 12%,#000 32%)}
 .figure img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;object-position:center bottom}
@@ -649,6 +668,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 
 <!-- HERO -->
 <div class="amb" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="lit lit-fixed" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
 <section class="hero" id="top" data-chapter="Abertura" aria-label="Abertura">
   <div class="hero-glow-fade" aria-hidden="true"><div class="hero-glow"></div></div>
   <h1 class="hero-word"><span>LUIZ MACHADO</span></h1>
@@ -682,7 +702,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </div>
 
 <!-- MANIFESTO -->
-<section class="manifesto wrap" data-chapter="Manifesto">
+<section class="manifesto wrap" data-chapter="Manifesto" data-light="r">
   <div>
     <p class="mono">Quem está por trás</p>
     <p class="big" data-alt="Sem telefone sem fio entre designer, programador e analista. Quem desenha a tela é quem escreve o código e monta o dashboard. Você fala com uma pessoa só, e ela entende o seu negócio.">Sou o Luiz, estudante de <span class="hl">Engenharia de Software</span> que desenvolve soluções digitais de ponta a ponta. No meu trabalho junto três coisas que quase nunca andam juntas: <span class="hl">código que roda em produção</span>, <span class="hl">dados que viram decisão</span> e <span class="hl">design que dá vontade de usar</span>. Uma pessoa, do rascunho ao deploy.</p>
@@ -700,7 +720,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </section>
 
 <!-- SERVICES -->
-<section class="services" id="servicos" data-chapter="Serviços">
+<section class="services" id="servicos" data-chapter="Serviços" data-light="r">
   <div class="svc-pin">
     <div class="svc-head wrap">
       <h2 class="display" data-alt="Problema|resolvido.">O que eu<br><span class="lime">entrego</span></h2>
@@ -712,6 +732,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
         <div class="sv-count mono"><b>01</b> / 06</div>
       </div>
     <article class="scene" data-label="Motion">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Motion</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -737,6 +758,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
     <article class="scene" data-label="Dashboards">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Dados</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -758,6 +780,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
     <article class="scene" data-label="Sites">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Web</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -779,6 +802,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
     <article class="scene" data-label="Sistemas">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Sistemas</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -797,6 +821,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
     <article class="scene" data-label="Automações">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Fluxos</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -822,6 +847,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
     <article class="scene" data-label="Design & vídeo">
+      <div class="lit scene-lit" aria-hidden="true"><i class="l"></i><i class="r"></i></div>
       <div class="scene-ghost" aria-hidden="true">Vídeo</div>
       <div class="scene-vis">
         <div class="svc-vis">
@@ -848,7 +874,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </section>
 
 <!-- STORY -->
-<section class="story wrap" id="historia" data-chapter="História">
+<section class="story wrap" id="historia" data-chapter="História" data-light="r">
   <div class="sec-head">
     <h2 class="display" data-alt="Bug por bug,|deploy a deploy">Como eu<br>cheguei <span class="lime">aqui</span></h2>
     <p>Comecei consertando bug em sistema de estoque. Passei por uma multinacional fazendo BI. No caminho, aprendi que dado bonito sem decisão e sistema sem design não resolvem nada.</p>
@@ -867,7 +893,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </section>
 
 <!-- DATA -->
-<section class="data" id="dados" data-chapter="Dados">
+<section class="data" id="dados" data-chapter="Dados" data-light="r">
   <div class="wrap">
     <div class="sec-head">
       <h2 class="display" data-alt="Menos planilha,|mais decisão">Números,<br>não <span class="lime">promessas</span></h2>
@@ -906,7 +932,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </section>
 
 <!-- WORK -->
-<section class="work wrap" id="projetos" data-chapter="Projetos">
+<section class="work wrap" id="projetos" data-chapter="Projetos" data-light="l">
   <div class="sec-head">
     <h2 class="display" data-alt="Arquitetura|à mostra">Projetos<br><span class="lime">por dentro</span></h2>
     <p>Passe o mouse (ou toque) em cada projeto para ver a arquitetura por trás da tela.</p>
@@ -987,7 +1013,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 </section>
 
 <!-- CONTACT -->
-<section class="contact wrap" id="contato" data-chapter="Contato">
+<section class="contact wrap" id="contato" data-chapter="Contato" data-light="r">
   <div class="ct-grid">
     <div class="ct-left">
       <p class="mono ct-eyebrow">Próxima cena</p>
@@ -1570,10 +1596,11 @@ if(!RM){
     .to({},{duration:.22})
     .to('.hero-copy',{opacity:0,y:-70,duration:.4,ease:'power1.in'},.22)
     .to('#figure',{scale:.86,yPercent:7,duration:.78,transformOrigin:'50% 100%'},.22)
-    .to(gc||{},{opacity:.18,duration:.5},.5)
-    .to('.hero-glow-fade',{opacity:.25,duration:.6},.4)   // its own wrapper: the entrance fades the glow itself in
+    .to(gc||{},{opacity:0,duration:.5},.5)
+    .to('.hero-glow-fade',{opacity:0,duration:.6},.4)   // its own wrapper: the entrance fades the glow itself in; the page's light takes over
+    .fromTo(heroEl,{'--shade':1},{'--shade':0,duration:.5},.5)
     .to('.hero-social,.hc-stats',{opacity:0,x:20,duration:.3},.22)
-    .to('.hero-word',{yPercent:30,opacity:.25,duration:.78},.22);
+    .to('.hero-word',{yPercent:10,opacity:0,duration:.5},.22);   // gone before the opening scrolls away, so its bottom edge never cuts it
 }
 
 /* ---- marquee w/ scroll velocity ---- */
@@ -1638,6 +1665,10 @@ if(!RM){
       .fromTo(cur.querySelector('.scene-ghost'),{y:200,opacity:1},{y:0,opacity:1,duration:1,ease:'power2.out'},t)
       .fromTo(cur.querySelectorAll('.scene-copy > *'),{y:70,opacity:0},{y:0,opacity:1,stagger:.07,duration:.38,ease:'power2.out'},t+.4);
   }
+  // each covering scene's copy of the light is held in place on screen and masked exactly like the scene's dark cover
+  const lits=scenes.map(sc=>sc.querySelector('.scene-lit'));
+  const holdLight=()=>{const H=stage.clientHeight;scenes.forEach((sc,i)=>{if(i&&lits[i])lits[i].style.setProperty('--sy',(gsap.getProperty(sc,'yPercent')/100*H)+'px')})};
+  tl.eventCallback('onUpdate',holdLight);holdLight();
   setActive(0);
   // settle on the nearest scene when the user stops scrolling inside the stage
   let snapping=false;
@@ -2040,6 +2071,26 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
   const cm=$('#copyMail');cm&&cm.addEventListener('click',complete);
   let saved=null;try{saved=localStorage.getItem('lm-pz')}catch(_){}
   choose(saved,false);count();
+})();
+
+/* ---- the opening's light, carried through the page ---- */
+(function(){
+  const els=$$('.lit .l, .lit .r'),secs=$$('section[data-light]');if(!els.length||!secs.length||!heroEl)return;
+  const side=el=>el.dataset.light==='l'?0:1;
+  // it rises while the opening winds down (the opening has its own light): the opening's own pin, when there is one
+  const pin=ScrollTrigger.getAll().find(t=>t.pin===heroEl),pinned=!!pin;
+  const hero=pin||ScrollTrigger.create({trigger:heroEl,start:'top top',end:'bottom top'});
+  // and changes side as each section arrives
+  const ts=secs.map(el=>ScrollTrigger.create({trigger:el,start:'top 75%',end:'top 15%'}));
+  let last='';
+  // progress read from the scroll position itself, so the order in which triggers update does not matter
+  const prog=t=>gsap.utils.clamp(0,1,(scrollY-t.start)/Math.max(1,t.end-t.start));
+  const apply=()=>{
+    const hp=prog(hero),I=pinned?gsap.utils.clamp(0,1,(hp-.4)/.6):hp;
+    let s=side(secs[0]);ts.forEach((t,i)=>{if(i)s+=(side(secs[i])-s)*prog(t)});
+    const L=(I*(1-s)).toFixed(3),R=(I*s).toFixed(3),k=L+R;if(k===last)return;last=k;
+    els.forEach(e=>e.style.opacity=e.classList.contains('l')?L:R)};
+  ScrollTrigger.create({start:0,end:'max',onUpdate:apply,onRefresh:apply});apply();
 })();
 
 ScrollTrigger.refresh();

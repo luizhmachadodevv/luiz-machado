@@ -90,6 +90,7 @@ body.cur-big .cur-dot{opacity:0}
 
 /* ---------- hero: the words on the left, the photo on the right (made of paint: the pointer drags it) ---------- */
 .hero{--mx:68%;--my:45%;position:relative;height:100svh;min-height:640px;overflow:hidden;isolation:isolate}
+.hero-glow-fade{position:absolute;inset:0;z-index:0;pointer-events:none}
 .hero-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
     linear-gradient(122deg,rgba(0,0,0,0) 48%,rgba(0,0,0,.55) 58%,rgba(0,0,0,0) 74%),
@@ -649,7 +650,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 <!-- HERO -->
 <div class="amb" aria-hidden="true"><i></i><i></i><i></i></div>
 <section class="hero" id="top" data-chapter="Abertura" aria-label="Abertura">
-  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-glow-fade" aria-hidden="true"><div class="hero-glow"></div></div>
   <h1 class="hero-word"><span>LUIZ MACHADO</span></h1>
   <canvas class="giro" aria-hidden="true"></canvas>
   <div class="figure" id="figure">
@@ -1553,7 +1554,7 @@ if(!RM){
   gsap.timeline(diveOn?{scrollTrigger:{trigger:heroEl,start:'top 60%'}}:{delay:.1})
     .from('.figure',{opacity:0,duration:1.6,ease:'power2.out'})
     .to(G,{intro:1,duration:1.8,ease:'power2.inOut'},'<')
-    .from('.hero-glow',{opacity:0,duration:2,ease:'power2.out'},'<')
+    .fromTo('.hero-glow',{opacity:0},{opacity:1,duration:2,ease:'power2.out'},'<')
     .fromTo('.hc-left > *',{opacity:0,y:24},{opacity:1,y:0,duration:.9,stagger:.09,ease:'power3.out',clearProps:'opacity,transform'},'<.2')
     .fromTo('.nav',{opacity:0,y:-14},{opacity:1,y:0,duration:.9,ease:'power3.out',clearProps:'opacity,transform'},'<')
     .fromTo('.hero-social a',{opacity:0,x:14},{opacity:1,x:0,duration:.7,stagger:.08,ease:'power3.out',clearProps:'opacity,transform'},'<.5')
@@ -1570,7 +1571,7 @@ if(!RM){
     .to('.hero-copy',{opacity:0,y:-70,duration:.4,ease:'power1.in'},.22)
     .to('#figure',{scale:.86,yPercent:7,duration:.78,transformOrigin:'50% 100%'},.22)
     .to(gc||{},{opacity:.18,duration:.5},.5)
-    .to('.hero-glow',{opacity:.25,duration:.6},.4)
+    .to('.hero-glow-fade',{opacity:.25,duration:.6},.4)   // its own wrapper: the entrance fades the glow itself in
     .to('.hero-social,.hc-stats',{opacity:0,x:20,duration:.3},.22)
     .to('.hero-word',{yPercent:30,opacity:.25,duration:.78},.22);
 }

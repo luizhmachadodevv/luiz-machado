@@ -407,11 +407,25 @@ html.pz-3d .pz-big{visibility:hidden}
 .stk-cats button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 .stk-stage{position:relative;height:clamp(460px,46vw,640px);perspective:1100px;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .stk-stage.drag{cursor:grabbing}
+.stk-play{position:relative;min-width:0}
+.stk-ctrl{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:flex-end;align-items:center;gap:22px;pointer-events:none;z-index:2}
+.stk-ctrl>*{pointer-events:auto}
+.stk-nav{display:flex;align-items:center;gap:10px}
+.stk-pos{font:500 11px/1 var(--f-mono);letter-spacing:.08em;color:var(--mute);min-width:7ch;text-align:center;font-variant-numeric:tabular-nums}
+.stk-btn{all:unset;box-sizing:border-box;cursor:pointer;width:42px;height:42px;display:grid;place-items:center;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(150deg,#262626,#0e0e0e 70%);box-shadow:0 4px 0 #050505,inset 0 1px 0 rgba(255,255,255,.1);color:var(--fg);transition:transform .12s,box-shadow .12s,background .25s,color .25s,border-color .25s}
+.stk-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.stk-btn:hover{background:linear-gradient(150deg,#FF8A50,#FE5101 60%);border-color:rgba(255,255,255,.3);color:var(--lime-ink)}
+.stk-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #050505}
+.stk-btn:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.stk-pad{display:grid;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(3,36px);gap:5px}
+.stk-pad .stk-btn{width:36px;height:36px;border-radius:10px}
+.stk-pad [data-rot=up]{grid-area:1/2}.stk-pad [data-rot=left]{grid-area:2/1}.stk-pad [data-rot=reset]{grid-area:2/2}.stk-pad [data-rot=right]{grid-area:2/3}.stk-pad [data-rot=down]{grid-area:3/2}
+.stk-pad [data-rot=reset] svg{width:14px;height:14px}
 .stk-orb{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
 .stk-stage::before{content:"";position:absolute;left:50%;top:50%;width:min(76%,560px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(254,81,1,.18),rgba(254,81,1,.05) 62%,transparent);pointer-events:none}
 .stk-ring{position:absolute;width:calc(var(--R) * 2.6);height:calc(var(--R) * 2.6);left:calc(var(--R) * -1.3);top:calc(var(--R) * -1.3);border-radius:50%;border:1px dashed rgba(254,81,1,.4);transform:rotateX(90deg);pointer-events:none}
 .stk-ring+.stk-ring{width:calc(var(--R) * 2.3);height:calc(var(--R) * 2.3);left:calc(var(--R) * -1.15);top:calc(var(--R) * -1.15);border:1px solid rgba(255,255,255,.08);transform:rotateZ(-24deg) rotateX(90deg)}
-.stk-hint{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font:500 10px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.stk-hint{position:absolute;left:50%;top:0;transform:translateX(-50%);font:500 10px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
 .key{all:unset;display:block;position:absolute;left:calc(var(--ks) / -2);top:calc(var(--ks) / -2);width:var(--ks);height:var(--ks);transform-style:preserve-3d;transform:rotateY(var(--lon)) rotateX(var(--lat)) translateZ(var(--R));cursor:pointer}
 .key-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.9,.3,1.3)}
 .key-in i{position:absolute;inset:0;border-radius:24%;background:hsl(0 0% calc(14% - var(--z) * .7%));transform:translateZ(calc(var(--z) * -1px));backface-visibility:hidden;pointer-events:none}
@@ -425,7 +439,8 @@ html.pz-3d .pz-big{visibility:hidden}
 .stk-orb.filter .key:not(.hit) .key-f svg{fill:rgba(255,255,255,calc(var(--a,1) * .14))}
 .stk-orb.filter .key.hit .key-f{border-color:var(--lime)}
 .key:focus-visible .key-f{outline:2px solid var(--lime);outline-offset:3px}
-@media (max-width:900px){.stk{grid-template-columns:1fr}.stk-stage{order:-1;height:min(112vw,520px)}}
+@media (max-width:900px){.stk{grid-template-columns:1fr}.stk-play{order:-1}.stk-stage{height:min(112vw,520px)}.stk-hint{display:none}
+  .stk-ctrl{position:static;margin-top:12px;justify-content:space-between}}
 
 /* ---------- projects ---------- */
 .work{padding-block:clamp(200px,38vh,420px) clamp(170px,32vh,360px)}
@@ -883,7 +898,13 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
       <div class="stk-cats" role="group" aria-label="Destacar uma área"></div>
     </div>
-    <div class="stk-stage"><div class="stk-orb"><span class="stk-ring"></span><span class="stk-ring"></span></div><span class="stk-hint" aria-hidden="true"></span></div>
+    <div class="stk-play">
+      <div class="stk-stage"><div class="stk-orb"><span class="stk-ring"></span><span class="stk-ring"></span></div><span class="stk-hint" aria-hidden="true"></span></div>
+      <div class="stk-ctrl">
+        <div class="stk-nav"><button class="stk-btn" type="button" data-step="-1" aria-label="Stack anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><span class="stk-pos">01 / 37</span><button class="stk-btn" type="button" data-step="1" aria-label="Próxima stack"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+        <div class="stk-pad" role="group" aria-label="Girar a esfera"><button class="stk-btn" type="button" data-rot="up" aria-label="Girar para cima"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button><button class="stk-btn" type="button" data-rot="left" aria-label="Girar para a esquerda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="stk-btn" type="button" data-rot="reset" aria-label="Voltar à posição inicial"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/></svg></button><button class="stk-btn" type="button" data-rot="right" aria-label="Girar para a direita"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><button class="stk-btn" type="button" data-rot="down" aria-label="Girar para baixo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1726,16 +1747,17 @@ if(!RM){
     orb.style.setProperty('--R',R.toFixed(1)+'px');orb.style.setProperty('--ks',Math.max(40,Math.min(72,R*.27)).toFixed(1)+'px')};
   fit();addEventListener('resize',fit);
   // spec card
-  const sp={cat:$('.stk-cat'),n:$('.stk-n'),ico:$('.stk-ico'),name:$('.stk-name'),desc:$('.stk-desc')};let shown=null;
+  const sp={pos:$('.stk-pos'),cat:$('.stk-cat'),n:$('.stk-n'),ico:$('.stk-ico'),name:$('.stk-name'),desc:$('.stk-desc')};let shown=null;
   function show(k){if(!k||shown===k)return;shown=k;
-    sp.cat.textContent=CAT[k.r[2]];sp.n.textContent=String(k.i+1).padStart(2,'0')+' / '+N;
+    sp.cat.textContent=CAT[k.r[2]];sp.n.textContent=String(k.i+1).padStart(2,'0')+' / '+N;if(sp.pos)sp.pos.textContent=sp.n.textContent;
     sp.ico.innerHTML=svgOf(k.r[1]);sp.name.textContent=k.r[0];sp.desc.textContent=k.r[3];
     if(!RM)gsap.fromTo([sp.ico,sp.name,sp.desc],{y:12,opacity:0},{y:0,opacity:1,duration:.45,stagger:.05,ease:'power3.out',overwrite:true})}
   $('.stk-hint').textContent=FINE?'arraste para girar · passe o mouse nas teclas':'arraste para girar · toque numa tecla';
   // motion state: spin (around y), tilt (around x); auto turns slowly unless reduced motion is on
-  const AUTO=RM?0:.0045,st={spin:.4,tilt:-.24,vs:AUTO,tx:-.24};let hover=null,pinned=null,front=null,vis=false,drag=null,moved=false;
-  const turnTo=k=>{const T=-k.lon,tw=Math.PI*2,cur=st.spin,tgt=T+Math.round((cur-T)/tw)*tw;
-    gsap.to(st,{spin:tgt,duration:RM?0:1,ease:'power3.inOut',overwrite:true});st.vs=0;st.tx=gsap.utils.clamp(-.7,.7,-k.lat)};
+  // bx: the base tilt (buttons, vertical drag), px: a small offset that follows the mouse
+  const AUTO=RM?0:.0045,TW=Math.PI*2,B0=-.24,st={spin:.4,tilt:B0,vs:AUTO,bx:B0,px:0};let hover=null,pinned=null,front=null,vis=false,drag=null,moved=false;
+  const near=(T,cur)=>T+Math.round((cur-T)/TW)*TW;           // the same angle, the turn closest to where it is now
+  const turnTo=k=>{gsap.to(st,{spin:near(-k.lon,st.spin),bx:near(gsap.utils.clamp(-1.2,1.2,-k.lat),st.bx),duration:RM?0:1,ease:'power3.inOut',overwrite:true});st.vs=0};
   const setOn=(k,on)=>k&&k.el.classList.toggle('on',on);
   // keys
   keys.forEach(k=>{
@@ -1746,15 +1768,25 @@ if(!RM){
     k.el.addEventListener('blur',()=>{if(pinned===k){pinned=null;setOn(k,false)}});
   });
   // drag to spin (horizontal only on touch, the page still scrolls vertically)
-  stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,id:e.pointerId};moved=false});
+  // (on desktop the mouse also drags it up and down)
+  stage.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,id:e.pointerId};moved=false});
   stage.addEventListener('pointermove',e=>{
-    if(FINE&&!drag){const r=stage.getBoundingClientRect();st.tx=-.24+((e.clientY-r.top)/r.height-.5)*.5}
-    if(!drag)return;const dx=e.clientX-drag.x;
-    if(!moved&&Math.abs(dx)>5){moved=true;stage.classList.add('drag');try{stage.setPointerCapture(drag.id)}catch(_){}}
-    if(moved){gsap.killTweensOf(st);st.spin+=dx*.006;st.vs=dx*.006;drag.x=e.clientX}});
+    if(FINE&&!drag){const r=stage.getBoundingClientRect();st.px=((e.clientY-r.top)/r.height-.5)*.5}
+    if(!drag)return;const dx=e.clientX-drag.x,dy=FINE?e.clientY-drag.y:0;
+    if(!moved&&Math.hypot(dx,dy)>5){moved=true;stage.classList.add('drag');try{stage.setPointerCapture(drag.id)}catch(_){}}
+    if(moved){gsap.killTweensOf(st);st.spin+=dx*.006;st.vs=dx*.006;st.bx-=dy*.006;st.tilt-=dy*.006;drag.x=e.clientX;drag.y=e.clientY}});
+  stage.addEventListener('pointerleave',()=>{st.px=0});
   const end=()=>{drag=null;stage.classList.remove('drag');setTimeout(()=>moved=false,0)};
   stage.addEventListener('pointerup',end);stage.addEventListener('pointercancel',end);
-  document.addEventListener('pointerdown',e=>{if(pinned&&!stage.contains(e.target)&&!e.target.closest('.stk-side')){setOn(pinned,false);pinned=null}});
+  document.addEventListener('pointerdown',e=>{if(pinned&&!stage.contains(e.target)&&!e.target.closest('.stk-side,.stk-ctrl')){setOn(pinned,false);pinned=null}});
+  // controls: previous / next key (inside the area picked in the chips, if any) and the d-pad
+  const pick=k=>{setOn(pinned,false);pinned=k;setOn(k,true);show(k);turnTo(k)};
+  $$('[data-step]').forEach(b=>b.addEventListener('click',()=>{const list=cat?keys.filter(k=>k.r[2]===cat):keys,d=+b.dataset.step;
+    let i=list.indexOf(pinned||shown);i=i<0?(d>0?0:list.length-1):(i+d+list.length)%list.length;pick(list[i])}));
+  const ROT={left:[-.75,0],right:[.75,0],up:[0,.6],down:[0,-.6]};
+  $$('[data-rot]').forEach(b=>b.addEventListener('click',()=>{const r=b.dataset.rot;st.vs=0;
+    if(r==='reset'){setOn(pinned,false);pinned=null;gsap.to(st,{bx:near(B0,st.bx),duration:RM?0:1,ease:'power3.inOut',overwrite:true});return}
+    gsap.to(st,{spin:st.spin+ROT[r][0],bx:st.bx+ROT[r][1],duration:RM?0:.7,ease:'power3.out',overwrite:true})}));
   // area chips
   const cats=$('.stk-cats');let cat=null;
   const light=c=>{orb.classList.toggle('filter',!!c);keys.forEach(k=>k.el.classList.toggle('hit',k.r[2]===c))};
@@ -1771,7 +1803,7 @@ if(!RM){
   gsap.ticker.add(()=>{
     if(!vis)return;
     if(!drag&&!gsap.isTweening(st)){st.vs+=((hover||pinned?0:AUTO)-st.vs)*.04;st.spin+=st.vs}
-    st.tilt+=(st.tx-st.tilt)*.05;
+    st.tilt+=(st.bx+st.px-st.tilt)*.08;
     orb.style.transform=`rotateX(${st.tilt.toFixed(4)}rad) rotateY(${st.spin.toFixed(4)}rad)`;
     if(++gf%(LOW?3:2))return;                               // shading and the front key: every other frame is plenty
     const cs=Math.cos(st.spin),sn=Math.sin(st.spin),ct=Math.cos(st.tilt),stl=Math.sin(st.tilt);let best=-2,bk=null;
@@ -1852,6 +1884,13 @@ $$('[data-alt]').forEach(el=>{
   const lay=document.createElement('span');lay.className='rv-alt';lay.setAttribute('aria-hidden','true');
   lay.innerHTML=el.dataset.alt.split('|').map(esc).join('<br>');
   el.appendChild(lay);
+  // a one-line alt longer than its word (the footer) narrows its own width axis to fit, and shrinks only past that
+  if(getComputedStyle(el).whiteSpace==='nowrap'){
+    const fitAlt=()=>{lay.style.fontSize='';const rg=document.createRange(),w=el.clientWidth*.97,tw=v=>{lay.style.fontVariationSettings=`'wdth' ${v}`;rg.selectNodeContents(lay);return rg.getBoundingClientRect().width};
+      let lo=62,hi=125;if(tw(hi)<=w)return;
+      for(let i=0;i<8;i++){const m=(lo+hi)/2;tw(m)<=w?lo=m:hi=m}
+      const t=tw(lo);if(t>w)lay.style.fontSize=(parseFloat(getComputedStyle(el).fontSize)*w/t)+'px'};
+    fitAlt();addEventListener('resize',()=>requestAnimationFrame(fitAlt));document.fonts&&document.fonts.ready.then(fitAlt)}
   const P=56,s={x:0,y:0,r:0};
   const R=()=>Math.max(64,Math.min(190,parseFloat(getComputedStyle(el).fontSize)*1.6));
   const apply=()=>{lay.style.clipPath=`circle(${s.r.toFixed(1)}px at ${(s.x+P).toFixed(1)}px ${(s.y+P).toFixed(1)}px)`};

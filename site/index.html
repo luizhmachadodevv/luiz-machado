@@ -233,7 +233,7 @@ body.in-dive .hud{opacity:0;transform:translateY(14px);pointer-events:none}
 .manifesto{min-height:100svh;display:flex;align-items:center;padding-block:clamp(96px,14vh,160px)}
 .manifesto .mono{color:var(--mute);margin:0 0 32px}
 .manifesto p.big{margin:0;font-family:var(--f-display);font-variation-settings:'wdth' 100;font-weight:600;font-size:clamp(26px,min(4.1vw,6.2vh),64px);line-height:1.08;letter-spacing:-.02em;max-width:22em;text-wrap:pretty}
-.manifesto .w{display:inline}
+.manifesto .w{display:inline-block;will-change:transform,opacity,filter}
 .manifesto .hl{color:var(--lime)}
 
 /* ---------- the puzzle: the visitor's solution, one piece per section ---------- */
@@ -1477,7 +1477,7 @@ void main(){
   vec4 c=me(uv);float a=c.a;
   vec3 col=a>.004?c.rgb/a:vec3(0.);
   float lum=dot(col,vec3(.299,.587,.114));
-  col=pow(col,vec3(.78))*1.3+.04;                          // lift the blacks: shirt and hair still read as tiles
+  col=pow(col,vec3(.74))*1.38+.05;                         // lift the blacks: shirt and hair still read clearly
   // orange light catching my outline, from the right and from above
   vec2 st=vec2(uC/uImg.z,uC/uImg.w);
   float aR=me(uv+vec2(st.x,0.)).a,aL=me(uv-vec2(st.x,0.)).a,aU=me(uv-vec2(0.,st.y)).a;
@@ -1486,22 +1486,22 @@ void main(){
   // switching on, tile by tile
   a*=step(h1(cell+3.1)*.75+uv.y*.25,uIntro*1.02);
   // each tile: a square with a gap, lit from the top left, its red and blue edges split like an old screen
-  float gap=.05+.07*(1.-lum),e=1.2/uC,ch=(.8+min(sp,4.)*.3)*uD/uC;
+  float gap=.035+.045*(1.-lum),e=1.2/uC,ch=min(.08+min(sp,4.)*.06,(.3+min(sp,4.)*.3)*uD/uC);
   vec2 d=abs(q-.5);float m=max(d.x,d.y);
   float iG=1.-smoothstep(.5-gap-e,.5-gap,m);
   vec2 dr=abs(q+vec2(ch,0.)-.5),db=abs(q-vec2(ch,0.)-.5);
   float iR=1.-smoothstep(.5-gap-e,.5-gap,max(dr.x,dr.y)),iB=1.-smoothstep(.5-gap-e,.5-gap,max(db.x,db.y));
   float rim=smoothstep(.5-gap-.18,.5-gap-.03,m),lit=q.x+q.y<1.?1.:-.55;
-  col=col*(1.+rim*lit*.3)+rim*lit*.025;
+  col=col*(1.+rim*lit*.18)+rim*lit*.015;
   vec3 tp=col*a*vec3(iR,iG,iB);float ta=a*max(iG,max(iR,iB));
   // the grid behind
   vec2 gr=grid(p);float ga=gr.x*.16+gr.y*.18;
   vec3 rgb=tp+vec3(.93,.9,.86)*ga*(1.-ta);float A=max(ta+ga*(1.-ta),a*.95);   // the gaps between my tiles are dark, so I stand in front of the name
   // scanlines, a slow bright sweep, grain
-  rgb*=.88+.12*smoothstep(0.,.7,abs(fract(p.y/(3.*uD))-.5)*2.);
+  rgb*=.94+.06*smoothstep(0.,.7,abs(fract(p.y/(3.*uD))-.5)*2.);
   float sy=fract(uT*.09)*1.5-.25,band=exp(-pow((p.y/uRes.y-sy)*26.,2.));
   rgb+=vec3(1.,.34,.02)*band*.1*ta;
-  float gn=(h1(p+fract(uT)*91.)-.5)*.05;rgb=max(rgb+gn*A,0.);
+  float gn=(h1(p+fract(uT)*91.)-.5)*.03;rgb=max(rgb+gn*A,0.);
   gl_FragColor=vec4(rgb,A);
 }`;
   const sh=(t,src)=>{const o=g.createShader(t);g.shaderSource(o,src);g.compileShader(o);if(!g.getShaderParameter(o,g.COMPILE_STATUS))throw new Error(g.getShaderInfoLog(o));return o};
@@ -1519,7 +1519,7 @@ void main(){
   let ready=false,cellPx=5;
   function gsize(){gc.width=Math.max(2,Math.round(heroEl.clientWidth*GD));gc.height=Math.max(2,Math.round(heroEl.clientHeight*GD));
     g.viewport(0,0,gc.width,gc.height);g.uniform2f(U.uRes,gc.width,gc.height);g.uniform1f(U.uD,GD);
-    cellPx=Math.min(7,Math.max(3.6,fig.offsetHeight/135));g.uniform1f(U.uC,cellPx*GD)}
+    cellPx=Math.min(4.4,Math.max(2.8,fig.offsetHeight/240));g.uniform1f(U.uC,cellPx*GD)}
   gsize();addEventListener('resize',gsize);
   const img=new Image();img.decoding='async';
   img.onload=()=>{g.activeTexture(g.TEXTURE0);g.bindTexture(g.TEXTURE_2D,tx);g.pixelStorei(g.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
@@ -1615,9 +1615,13 @@ const big=$('.manifesto .big');
   });
 })(big);
 if(!RM){
-  const words=$$('.w',big);gsap.set(words,{opacity:.12});
+  // each word rises out of a blur into place, one after the other, as the section is scrolled (no blur on weak devices)
+  const words=$$('.w',big),BL=LITE?0:9;
   gsap.fromTo('.manifesto > div',{y:140,opacity:0},{y:0,opacity:1,ease:'power2.out',scrollTrigger:{trigger:'.manifesto',start:'top 92%',end:'top top',scrub:1.2}});
-  gsap.to(words,{opacity:1,stagger:.1,ease:'none',scrollTrigger:{trigger:'.manifesto',start:'top top',end:'+=340%',pin:true,scrub:1.2}});
+  gsap.timeline({scrollTrigger:{trigger:'.manifesto',start:'top top',end:'+=340%',pin:true,scrub:1.2}})
+    .fromTo(words,{opacity:0,yPercent:70,rotation:4,filter:`blur(${BL}px)`},
+      {opacity:1,yPercent:0,rotation:0,filter:'blur(0px)',duration:.9,stagger:.12,ease:'power3.out',transformOrigin:'0% 100%'})
+    .to({},{duration:1.2});   // the whole text holds for a moment before the section leaves
 }
 
 /* ---- services: one full-screen scene per scroll step ---- */

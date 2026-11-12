@@ -97,6 +97,11 @@ body.cur-big .cur-dot{opacity:0}
 .giro-hint b:last-child{animation-direction:reverse}
 @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
 .hero.giro-on .giro-hint.show{opacity:1}
+.hero-social{position:absolute;z-index:6;right:max(var(--gut),env(safe-area-inset-right,0px));top:50%;translate:0 -50%;display:flex;flex-direction:column;gap:26px}
+.hero-social a{display:grid;place-items:center;width:22px;height:22px;color:#8E8E88;transition:color .25s,transform .25s var(--ease)}
+.hero-social a:hover,.hero-social a:focus-visible{color:var(--lime);transform:translateX(-3px)}
+.hero-social svg{width:20px;height:20px;display:block}
+@media (max-width:760px){.hero-social{top:auto;bottom:calc(28px + env(safe-area-inset-bottom,0px));translate:none;gap:22px}}
 .hero-copy{position:absolute;z-index:5;inset:0;display:flex;align-items:center;pointer-events:none;padding-top:40px}
 .hc-left{width:min(560px,46vw);display:grid;gap:26px;pointer-events:auto}
 .hc-id{display:grid;gap:8px}
@@ -130,7 +135,7 @@ body.cur-big .cur-dot{opacity:0}
   .hero{--fh:min(calc(100svh - 430px),112vw);min-height:720px}
   .figure{--h:var(--fh);right:0;left:0;margin-inline:auto;bottom:auto;top:64px}
   .hero::after{height:40%}
-  .hero-copy{align-items:flex-end;padding:0 0 calc(64px + env(safe-area-inset-bottom,0px))}
+  .hero-copy{align-items:flex-end;padding-top:0;padding-bottom:calc(48px + env(safe-area-inset-bottom,0px));padding-right:calc(var(--gut) + 44px)}
   .hc-left{width:100%;gap:18px}
   .hc-statement{font-size:clamp(38px,11vw,54px)}
   .hc-hint{display:none}
@@ -612,7 +617,12 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
   <div class="figure" id="figure">
     <img id="front" src="assets/luiz-giro-2-frente.webp" alt="Luiz Machado de frente, de blusa cinza com zíper" width="444" height="720" fetchpriority="high">
   </div>
-  <p class="giro-hint" aria-hidden="true"><b>&larr;</b>Arraste para me girar<b>&rarr;</b></p>
+  <nav class="hero-social" aria-label="Contato e redes">
+    <a href="https://wa.me/5541987321919?text=Ol%C3%A1%20Luiz%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20quero%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 20.4l1.2-3.9A8.6 8.6 0 1 1 8 19.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 7.6l1.1 2.3-.9 1.1c.6 1.1 1.5 2 2.6 2.6l1.1-.9 2.3 1.1-.4 1.4c-3.4.2-6.6-3-6.4-6.4z" fill="currentColor"/></svg></a>
+    <a href="https://www.linkedin.com/in/luiz-henrique-da-silva-machado/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 3.6a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3.5 9h3.4v11.4H3.5zM9.2 9h3.3v1.6c.5-.9 1.7-1.9 3.5-1.9 3.7 0 4.4 2.4 4.4 5.6v6.1h-3.4v-5.4c0-1.3 0-2.9-1.8-2.9s-2.1 1.4-2.1 2.8v5.5H9.2z" fill="currentColor"/></svg></a>
+    <a href="https://github.com/LuizHMachado05" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 0 0-3.3 20.5c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.3-3.5-1.3-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.5 1.1 3.1.9.1-.7.4-1.1.7-1.4-2.3-.3-4.8-1.2-4.8-5.2 0-1.1.4-2.1 1.1-2.8-.1-.3-.5-1.3.1-2.8 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.5.2 2.5.1 2.8.7.7 1.1 1.7 1.1 2.8 0 4-2.5 4.9-4.8 5.2.4.3.7.9.7 1.9v2.9c0 .3.2.6.7.5A10.5 10.5 0 0 0 12 1.5z" fill="currentColor"/></svg></a>
+    <a href="mailto:machadoluiz659@gmail.com" aria-label="E-mail"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.8 7l8.2 6 8.2-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
+  </nav>
   <div class="hero-copy wrap">
     <div class="hc-left">
       <div class="hc-id">
@@ -620,15 +630,6 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
         <p class="hc-role">Desenvolvedor · Dados · Motion design</p>
       </div>
       <p class="hc-statement" data-alt="Então deixa eu cuidar da sua.">A primeira impressão é <span class="lime">a que fica.</span></p>
-      <p class="hc-hint" aria-hidden="true"><i></i><span class="hc-hint-t">Passe o mouse na frase e na foto</span></p>
-      <div class="hc-ctas">
-        <a class="btn" href="#contato">Começar um projeto</a>
-        <details class="cv"><summary class="btn ghost">Currículo </summary><div class="cv-menu">
-          <a href="cv/luiz-machado-cv-dev-pt.pdf" target="_blank" rel="noopener">Desenvolvimento <span>PT</span></a>
-          <a href="cv/luiz-machado-cv-bi-pt.pdf" target="_blank" rel="noopener">Dados &amp; BI <span>PT</span></a>
-          <a href="cv/luiz-machado-cv-data-eng-en.pdf" target="_blank" rel="noopener">Data Engineering <span>EN</span></a>
-        </div></details>
-      </div>
     </div>
   </div>
 </section>
@@ -1139,11 +1140,6 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 <div class="pz-fly" aria-hidden="true"></div>
 <canvas class="pz3" aria-hidden="true"></canvas>
 <span class="pz3-lbl" aria-hidden="true"></span>
-<div class="hud wrap" aria-label="Linha do tempo da página">
-  <span class="hud-rec"><i></i><span id="tc">00:00:00:00</span></span>
-  <div class="hud-track" id="hudTrack"><span class="hud-fill" id="hudFill"></span><span class="hud-head" id="hudHead"></span></div>
-  <span class="hud-chap" id="hudChap">Abertura</span>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1384,7 +1380,6 @@ if(!diveOn&&dive)dive.remove();
 const heroEl=$('.hero'),fig=$('#figure'),gc=$('canvas.giro'),gHint=$('.giro-hint');
 let heroVis=true;new IntersectionObserver(([e])=>heroVis=e.isIntersecting).observe(heroEl);
 if(FINE&&!RM)heroEl.addEventListener('pointermove',e=>{const r=heroEl.getBoundingClientRect();heroEl.style.setProperty('--mx',(e.clientX-r.left)+'px');heroEl.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
-$$('.hc-hint-t').forEach(h=>h.textContent=FINE?'Passe o mouse na frase · arraste para me girar':'Toque na frase · arraste para me girar');
 const G={intro:0};let giroOn=false,gg=null;
 if(!RM&&gc){try{gg=gc.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:false})}catch(_){}}
 if(gg){try{
@@ -1470,8 +1465,7 @@ void main(){
   let ready=false,cellPx=5;
   function gsize(){gc.width=Math.max(2,Math.round(heroEl.clientWidth*GD));gc.height=Math.max(2,Math.round(heroEl.clientHeight*GD));
     g.viewport(0,0,gc.width,gc.height);g.uniform2f(U.uRes,gc.width,gc.height);g.uniform1f(U.uD,GD);
-    cellPx=Math.min(7,Math.max(3.6,fig.offsetHeight/135));g.uniform1f(U.uC,cellPx*GD);
-    gHint.style.left=(fig.offsetLeft+fig.offsetWidth/2)+'px';gHint.style.top=(fig.offsetTop+fig.offsetHeight*(innerWidth>900?.8:.84))+'px'}
+    cellPx=Math.min(7,Math.max(3.6,fig.offsetHeight/135));g.uniform1f(U.uC,cellPx*GD)}
   gsize();addEventListener('resize',gsize);
   const img=new Image();img.decoding='async';
   img.onload=()=>{g.activeTexture(g.TEXTURE0);g.bindTexture(g.TEXTURE_2D,tx);g.pixelStorei(g.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
@@ -1481,7 +1475,7 @@ void main(){
   // ---- the turn: angle in degrees (0 = facing you; it grows as I turn to my left, the way the video turns)
   let ang=0,av=SPIN,prevAng=0,hair=0,hairV=0,dragging=false,moved=0,lastX=0,lastT=0,touched=false,lastInput=-9e9;
   const K=()=>360/Math.max(240,fig.offsetWidth*2.2);
-  const hideHint=()=>{if(!touched){touched=true;gHint.classList.remove('show')}};
+  const hideHint=()=>{touched=true};
   const skip=e=>e.target.closest('a,button,summary,details,input,label,.hc-statement,.nav');
   heroEl.addEventListener('pointerdown',e=>{if(!ready||e.button>0||skip(e))return;
     dragging=true;moved=0;lastX=e.clientX;lastT=performance.now();av=0;heroEl.classList.add('grabbing');
@@ -1493,8 +1487,6 @@ void main(){
     if(performance.now()-lastT>90)av=0;                    // held still before letting go: no throw
     if(moved<5){av=760;hideHint()}};                        // a click: a fast spin
   heroEl.addEventListener('pointerup',up);heroEl.addEventListener('pointercancel',up);
-  // once the hero arrives: the hint that I can be spun
-  ScrollTrigger.create({trigger:heroEl,start:'top 35%',once:true,onEnter:()=>setTimeout(()=>{if(!touched)gHint.classList.add('show')},2200)});
   let lt=performance.now(),hf=0;const t0=lt;
   gsap.ticker.add(()=>{
     const now=performance.now(),dt=Math.min(.05,(now-lt)/1000);lt=now;
@@ -1522,7 +1514,8 @@ if(!RM){
     .from('.figure',{opacity:0,duration:1.6,ease:'power2.out'})
     .to(G,{intro:1,duration:1.8,ease:'power2.inOut'},'<')
     .from('.hero-glow',{opacity:0,duration:2,ease:'power2.out'},'<')
-    .from(diveOn?'.hc-left > *':'.hc-left > *, .nav',{opacity:0,y:24,duration:.9,stagger:.09,ease:'power3.out'},'<.2');
+    .from(diveOn?'.hc-left > *':'.hc-left > *, .nav',{opacity:0,y:24,duration:.9,stagger:.09,ease:'power3.out'},'<.2')
+    .from('.hero-social a',{opacity:0,x:14,duration:.7,stagger:.08,ease:'power3.out'},'<.5');
   // scroll away
   // the opening holds still for the first scroll, then winds down in place before handing over to the manifesto
   gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:heroEl,start:'top top',end:'+=110%',pin:true,scrub:1.2,anticipatePin:1}})
@@ -1531,7 +1524,7 @@ if(!RM){
     .to('#figure',{scale:.86,yPercent:7,duration:.78,transformOrigin:'50% 100%'},.22)
     .to(gc||{},{opacity:.18,duration:.5},.5)
     .to('.hero-glow',{opacity:.25,duration:.6},.4)
-    .to('.giro-hint',{opacity:0,duration:.15},.22);
+    .to('.hero-social',{opacity:0,x:20,duration:.3},.22);
 }
 
 /* ---- marquee w/ scroll velocity ---- */
@@ -2000,33 +1993,6 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
   choose(saved,false);count();
 })();
 
-/* ---- HUD: scroll as a video timeline ---- */
-const TOTAL=96,FPS=24;
-const track=$('#hudTrack'),head=$('#hudHead'),fill=$('#hudFill'),tc=$('#tc'),chap=$('#hudChap');
-let marks=[];
-function buildMarks(){
-  const max=ScrollTrigger.maxScroll(window)||1;
-  $$('.hud-mk',track).forEach(n=>n.remove());
-  marks=$$('[data-chapter]').map(sec=>{
-    const el=sec.parentElement.classList.contains('pin-spacer')?sec.parentElement:sec;
-    const y=Math.max(0,el.getBoundingClientRect().top+scrollY);const p=Math.min(1,y/max);
-    const b=document.createElement('button');b.type='button';b.className='hud-mk';b.style.left=(p*100)+'%';
-    b.innerHTML=`<span>${sec.dataset.chapter}</span>`;b.setAttribute('aria-label','Ir para '+sec.dataset.chapter);
-    b.addEventListener('click',()=>goTo(y));track.appendChild(b);
-    return{p,name:sec.dataset.chapter};
-  });
-  hud();
-}
-const pad=n=>String(n).padStart(2,'0');
-function hud(){
-  const max=ScrollTrigger.maxScroll(window)||1,p=Math.min(1,Math.max(0,scrollY/max));
-  head.style.left=(p*100)+'%';fill.style.width=(p*100)+'%';
-  const f=Math.floor(p*TOTAL*FPS),s=Math.floor(f/FPS);
-  tc.textContent=`00:${pad(Math.floor(s/60))}:${pad(s%60)}:${pad(f%FPS)}`;
-  let n=marks[0]?marks[0].name:'';marks.forEach(m=>{if(p+0.002>=m.p)n=m.name});chap.textContent=n;
-}
-ScrollTrigger.addEventListener('refresh',buildMarks);
-addEventListener('scroll',hud,{passive:true});
 ScrollTrigger.refresh();
 })();
 </script>

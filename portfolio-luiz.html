@@ -226,15 +226,6 @@ body.in-dive .hud{opacity:0;transform:translateY(14px);pointer-events:none}
 .manifesto .hl{color:var(--lime)}
 
 /* ---------- the puzzle: the visitor's solution, one piece per section ---------- */
-.pz-ask{margin-top:clamp(32px,5vh,56px);display:grid;gap:14px}
-.manifesto .pz-ask .mono{margin:0;color:var(--fg)}
-.pz-ask .mono i{font-style:normal;color:var(--lime)}
-.pz-opts{display:flex;flex-wrap:wrap;gap:10px}
-.pz-opt{all:unset;box-sizing:border-box;cursor:pointer;height:44px;padding:0 20px;border-radius:99px;box-shadow:inset 0 0 0 1px #3A3A3A;font:600 12px/44px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fg);transition:background-color .25s,color .25s,box-shadow .25s,transform .25s var(--ease)}
-.pz-opt:hover{box-shadow:inset 0 0 0 1px var(--lime);color:var(--lime)}
-.pz-opt[aria-pressed="true"]{background:var(--lime);color:var(--lime-ink);box-shadow:none}
-.pz-opt:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
-.pz-note{margin:0;color:#9A9A94;font-size:14px;line-height:1.5}
 .pz{position:fixed;right:max(var(--gut),env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:66;width:clamp(160px,13.5vw,204px);padding:10px 10px 9px;border-radius:12px;
   background:rgba(14,14,14,.86);box-shadow:inset 0 0 0 1px #2A2A2A,0 18px 50px rgba(0,0,0,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
@@ -691,16 +682,6 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
   <div>
     <p class="mono">Quem está por trás</p>
     <p class="big" data-alt="Sem telefone sem fio entre designer, programador e analista. Quem desenha a tela é quem escreve o código e monta o dashboard. Você fala com uma pessoa só, e ela entende o seu negócio.">Sou o Luiz, estudante de <span class="hl">Engenharia de Software</span> que desenvolve soluções digitais de ponta a ponta. No meu trabalho junto três coisas que quase nunca andam juntas: <span class="hl">código que roda em produção</span>, <span class="hl">dados que viram decisão</span> e <span class="hl">design que dá vontade de usar</span>. Uma pessoa, do rascunho ao deploy.</p>
-    <div class="pz-ask">
-      <p class="mono">Antes de seguir: <i>o que você quer construir?</i></p>
-      <div class="pz-opts" role="group" aria-label="O que você quer construir">
-        <button class="pz-opt" type="button" data-k="site" aria-pressed="false">Site</button>
-        <button class="pz-opt" type="button" data-k="sistema" aria-pressed="false">Sistema</button>
-        <button class="pz-opt" type="button" data-k="dashboard" aria-pressed="false">Dashboard</button>
-        <button class="pz-opt" type="button" data-k="automacao" aria-pressed="false">Automação</button>
-      </div>
-      <p class="pz-note">Role a página: cada parte do site encaixa uma peça da sua solução.</p>
-    </div>
   </div>
 </section>
 
@@ -1927,8 +1908,10 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
     const MOB=()=>innerWidth<=760,Wb=()=>MOB()?150:Math.min(340,Math.max(220,innerWidth*.2)),SIDE=[1,-1,1,-1,1];
     const ax=sd=>{const w=Wb(),m=Math.max(20,innerWidth*.045);return sd>0?innerWidth-m-w/2:m+w/2};
     const ay=()=>MOB()?innerHeight-96-Wb()/3:innerHeight*.6;
+    // where it rests for section i: a side, except in the services, where it waits at the bottom centre, out of the reading path
+    const SVC=1,rx_=i=>i===SVC?innerWidth/2:ax(SIDE[i]),ry_=i=>i===SVC?innerHeight-Wb()*.36-(MOB()?40:46):ay();
     const toWorld=(x,y,z)=>{const d=CZ-z;return new V3(((x/innerWidth)*2-1)*TH*cam.aspect*d,-((y/innerHeight)*2-1)*TH*d,z)};
-    const BUSY='p,h1,h2,h3,h4,li,a,button,img,video,table,figure,.svc-vis,.pj,.ct-card,.chips,.pz-opts';
+    const BUSY='p,h1,h2,h3,h4,li,a,button,img,video,table,figure,.svc-vis,.pj,.ct-card,.chips';
     let lastY=scrollY,vel=0,frame=0,busy=false,shown=false,lt=performance.now(),lblTxt='';const t0=lt;
     gsap.ticker.add(()=>{
       const now=performance.now(),dt=Math.min(.05,(now-lt)/1000),t=(now-t0)/1000;lt=now;
@@ -1938,7 +1921,7 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
       shown=true;
       const w0=Wb();let x,y,w=w0,travel=0;
       if(i<0){x=ax(1);y=ay()}
-      else{const e=ease(Math.min(1,P[i])),fx=i?ax(SIDE[i-1]):innerWidth+w0*.8,fy=i?ay():innerHeight*.92,tx=ax(SIDE[i]),ty=ay();
+      else{const e=ease(Math.min(1,P[i])),fx=i?rx_(i-1):innerWidth+w0*.8,fy=i?ry_(i-1):innerHeight*.92,tx=rx_(i),ty=ry_(i);
         x=fx+(tx-fx)*e;y=fy+(ty-fy)*e-Math.sin(Math.PI*e)*(MOB()?30:80);travel=Math.sin(Math.PI*e)*Math.sign(tx-fx)}
       let dk=0;
       if(pd>0&&big){const e=ease(pd),b=big.getBoundingClientRect(),dx=b.left+164/328*b.width,dy=b.top+144/258*b.height,dw=300/328*b.width;
@@ -2027,17 +2010,12 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
   if(D3)ScrollTrigger.create({trigger:'.contact',start:'top 85%',end:'top 30%',onUpdate:st=>{pd=st.progress},onLeave:()=>{pd=1},onLeaveBack:()=>{pd=0}});
   // what they want to build: it changes the picture, the titles and the WhatsApp message
   const WA='https://wa.me/5541987321919?text=',waLinks=$$('a[href^="https://wa.me/5541987321919"]');
-  const opts=$$('.pz-opt');
-  function choose(k,user){kind=KIND[k]?k:null;
+  function choose(k){kind=KIND[k]?k:null;
     pic.setAttribute('href','#pz-pic-'+(kind||'none'));if(D3)D3.setKind(kind);
     titleEl.textContent=title();
-    opts.forEach(o=>o.setAttribute('aria-pressed',String(o.dataset.k===kind)));
-    const msg=kind?`Olá Luiz, vim pelo seu portfólio e montei o quebra-cabeça: quero ${KIND[kind][1]}. Podemos conversar?`:'Olá Luiz, vim pelo seu portfólio e quero conversar sobre um projeto.';
+    const msg='Olá Luiz, vim pelo seu portfólio e quero conversar sobre um projeto.';
     waLinks.forEach(a=>a.href=WA+encodeURIComponent(msg));
-    if(fin)$('.pz-f-k',fin).textContent=title()+(done?' · montado':' · a última peça é sua');
-    if(user){try{localStorage.setItem('lm-pz',kind||'')}catch(_){}
-      if(!RM&&!D3)gsap.fromTo(pz,{scale:1.08},{scale:1,duration:.6,ease:'back.out(2.5)',clearProps:'scale'})}}
-  opts.forEach(o=>o.addEventListener('click',()=>choose(o.dataset.k===kind?null:o.dataset.k,true)));
+    if(fin)$('.pz-f-k',fin).textContent=title()+(done?' · montado':' · a última peça é sua')}
   // the finale: five pieces in, the last one floating over its slot until they get in touch
   function setFinText(){if(!fin)return;$('.pz-f-t',fin).innerHTML='Solução montada. <span class="lime">Agora é só começar.</span>';
     $('.pz-f-s',fin).textContent='Te respondo em até 24h com um caminho e um prazo.';$('.pz-f-k',fin).textContent=title()+' · montado'}
@@ -2054,8 +2032,7 @@ $$('.rv-hint-t').forEach(h=>h.lastChild.textContent=FINE?'Passe o mouse nos tít
     gsap.to(fin6.at[5],{x:0,y:0,rotation:0,svgOrigin:'250 150',duration:.9,ease:'back.out(1.7)',onComplete:()=>click(fin6,5)})}
   waLinks.forEach(a=>a.addEventListener('click',complete));
   const cm=$('#copyMail');cm&&cm.addEventListener('click',complete);
-  let saved=null;try{saved=localStorage.getItem('lm-pz')}catch(_){}
-  choose(saved,false);count();
+  choose('site');count();
 })();
 
 /* ---- the opening's light, carried through the page ---- */

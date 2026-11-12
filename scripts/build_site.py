@@ -11,7 +11,7 @@ for name in ('assets', 'cv', 'index.html', 'favicon.svg', 'vercel.json'):
         os.remove(t)
 for d in ('assets', 'cv'):
     os.makedirs(os.path.join(out, d))
-for f in ('luiz-laranja.webp',):
+for f in ('luiz-laranja.webp', 'luiz-giro-2.webp', 'luiz-giro-2-frente.webp'):
     shutil.copy(os.path.join(root, 'assets', f), os.path.join(out, 'assets', f))
 for f in os.listdir(os.path.join(root, 'cv')):
     shutil.copy(os.path.join(root, 'cv', f), os.path.join(out, 'cv', f))
@@ -45,7 +45,7 @@ html = f'''<!doctype html>
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="assets/luiz-laranja.webp">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="assets/luiz-laranja.webp">
+<link rel="preload" as="image" href="assets/luiz-giro-2.webp">
 {head_part}
 <style>html,body{{margin:0}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
 </head>

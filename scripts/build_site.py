@@ -13,6 +13,8 @@ for d in ('assets', 'cv'):
     os.makedirs(os.path.join(out, d))
 for f in ('luiz-laranja.webp', 'luiz-giro-2.webp', 'luiz-giro-2-frente.webp'):
     shutil.copy(os.path.join(root, 'assets', f), os.path.join(out, 'assets', f))
+# project screenshots (Projetos section)
+shutil.copytree(os.path.join(root, 'assets', 'projetos'), os.path.join(out, 'assets', 'projetos'))
 for f in os.listdir(os.path.join(root, 'cv')):
     shutil.copy(os.path.join(root, 'cv', f), os.path.join(out, 'cv', f))
 

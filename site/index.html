@@ -426,12 +426,20 @@ html.pz-3d .pz-big{visibility:hidden}
 /* ---------- projects ---------- */
 .work{padding-block:clamp(200px,38vh,420px) clamp(170px,32vh,360px)}
 .pj-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.pj{position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;min-height:440px;background:var(--bg-2);isolation:isolate}
-.pj.wide{grid-column:1/-1;min-height:360px}
+.pj{position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg-2);isolation:isolate}
 .pj-face,.pj-back{position:absolute;inset:0;padding:clamp(20px,2.6vw,36px);display:flex;flex-direction:column;gap:14px}
+.pj-face{position:relative}
 .pj-back{background:var(--lime);color:var(--lime-ink);clip-path:circle(0px at 50% 50%);z-index:2}
 .pj-cover{flex:1;min-height:150px;border-radius:4px;border:1px solid var(--line);background:var(--bg);position:relative;overflow:hidden}
-.pj-cover svg{position:absolute;inset:0;width:100%;height:100%}
+.pj-shot{flex:none;min-height:0;display:flex;flex-direction:column;background:#070707}
+.pj-bar{display:flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-bottom:1px solid var(--line);font:500 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.pj-bar i{width:7px;height:7px;border-radius:50%;background:var(--line);flex:none}
+.pj-bar i:first-child{background:var(--lime)}
+.pj-bar span{margin-left:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pj-view{position:relative;aspect-ratio:16/9;overflow:hidden}
+.pj-view>b{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(26px) saturate(1.4) brightness(.38)}
+.pj-view img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 40px);max-height:calc(100% - 40px);width:auto;height:auto;border-radius:3px;box-shadow:0 22px 44px -14px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.09);transition:transform 1.2s var(--ease)}
+.pj:hover .pj-view img{transform:scale(1.03)}
 .pj-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--mute)}
 .pj h3{margin:0;font-family:var(--f-display);font-variation-settings:'wdth' 115;font-weight:800;font-size:clamp(28px,3vw,46px);line-height:.95;letter-spacing:-.02em}
 .pj-face p{margin:0;color:var(--mute);max-width:52ch}
@@ -440,7 +448,7 @@ html.pz-3d .pz-big{visibility:hidden}
 .flow li{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.18)}
 .flow li em{font-style:normal;opacity:.5;font-size:.75em;min-width:2.4em}
 .pj-back .big{margin-top:auto;font-family:var(--f-display);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(28px,3.2vw,48px);letter-spacing:-.03em;line-height:.95}
-@media (max-width:760px){.pj-grid{grid-template-columns:1fr}.pj{min-height:420px}}
+@media (max-width:760px){.pj-grid{grid-template-columns:1fr}.pj-view img{max-width:calc(100% - 24px);max-height:calc(100% - 24px)}}
 
 /* ---------- contact ---------- */
 .contact{padding-block:160px 140px;position:relative;overflow:hidden}
@@ -490,20 +498,10 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 .ba .bar i{background-image:repeating-linear-gradient(-45deg,rgba(0,0,0,.18) 0 8px,transparent 8px 16px);background-size:22.63px 22.63px;animation:stripes .9s linear infinite}
 @keyframes stripes{to{background-position:22.63px 0}}
 .v-bi .chart i{transition:height .9s var(--ease)}
-.pj-cover path[fill="none"]{stroke-dasharray:640;stroke-dashoffset:640;animation:drawLoop 4.2s var(--ease) infinite}
 @keyframes drawLoop{0%{stroke-dashoffset:640}45%,72%{stroke-dashoffset:0}100%{stroke-dashoffset:-640}}
-.pj-cover line{animation:flow 1s linear infinite}
-.pj-cover circle{transform-box:fill-box;transform-origin:center;animation:pin 1.4s ease-in-out infinite}
 @keyframes pin{50%{transform:scale(1.45)}}
-.pj-cover rect[fill="#FF4D3A"],.pj-cover text{animation:blink 1.2s steps(1) infinite}
-.pj:nth-child(2) .pj-cover rect[fill="#FE5101"]{transform-box:fill-box;animation:gantt 3s var(--ease) infinite alternate}
-.pj:nth-child(2) .pj-cover g rect{transform-box:fill-box;transform-origin:left;animation:grow-x 3.6s var(--ease) infinite alternate}
-.pj:nth-child(2) .pj-cover g rect:nth-child(2){animation-delay:.4s}.pj:nth-child(2) .pj-cover g rect:nth-child(3){animation-delay:.8s}.pj:nth-child(2) .pj-cover g rect:nth-child(4){animation-delay:1.2s}
 @keyframes gantt{from{transform:translateX(-70px)}to{transform:translateX(50px)}}
 @keyframes grow-x{from{transform:scaleX(.55)}to{transform:scaleX(1)}}
-.pj.wide .pj-cover rect{transform-box:fill-box;transform-origin:bottom;animation:grow 2.6s var(--ease) infinite alternate}
-.pj.wide .pj-cover rect:nth-child(2n){animation-delay:.35s}.pj.wide .pj-cover rect:nth-child(3n){animation-delay:.7s}
-.pj.wide .pj-cover g:first-child rect{transform-origin:left;animation-name:grow-x}
 .kpi strong{transition:color .3s}
 .kpi .spark{display:block;width:100%;height:28px;margin-top:4px}
 .kpi .spark path{fill:none;stroke:var(--line);stroke-width:1.5}
@@ -923,7 +921,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
     <article class="pj" data-cursor="abrir">
       <div class="pj-face">
         <div class="pj-meta mono"><span>Hackathon · IA</span><span>Python · Gemini · Docker</span></div>
-        <div class="pj-cover"><svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 C 60 118, 80 110, 120 112 S 190 100, 220 70 S 260 20, 290 30 S 340 90, 400 84" fill="none" stroke="#FE5101" stroke-width="2"/><line x1="0" y1="50" x2="400" y2="50" stroke="#FF4D3A" stroke-dasharray="4 4"/><circle cx="268" cy="24" r="6" fill="#FF4D3A"/></svg></div>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>eletrofrio · notificações</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/eletrofrio-notificacoes.webp)"></b><img src="assets/projetos/eletrofrio-notificacoes.webp" width="1600" height="708" loading="lazy" decoding="async" alt="Painel de notificações da Eletrofrio com total de alarmes, envios pelo WhatsApp e taxa de sucesso"></div></div>
         <h3>Eletrofrio</h3>
         <p>Alarmes inteligentes para refrigeração: a IA lê a curva de temperatura, diagnostica e avisa a equipe no WhatsApp.</p>
       </div>
@@ -937,7 +935,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
     <article class="pj" data-cursor="abrir">
       <div class="pj-face">
         <div class="pj-meta mono"><span>Full-stack · Indústria</span><span>TypeScript · Node · Mongo</span></div>
-        <div class="pj-cover"><svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true"><g fill="#2A2A2A"><rect x="20" y="20" width="160" height="16" rx="2"/><rect x="60" y="48" width="220" height="16" rx="2"/><rect x="140" y="76" width="120" height="16" rx="2"/><rect x="40" y="104" width="300" height="16" rx="2"/></g><rect x="200" y="76" width="60" height="16" rx="2" fill="#FE5101"/><line x1="232" y1="0" x2="232" y2="160" stroke="#FFFFFF" stroke-dasharray="2 4"/></svg></div>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>simoldes · sistema de controle</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/simoldes-sistema.webp)"></b><img src="assets/projetos/simoldes-sistema.webp" width="1400" height="626" loading="lazy" decoding="async" alt="Tela do sistema de controle da Simoldes com a lista de projetos de molde"></div></div>
         <h3>Simoldes</h3>
         <p>Gestão de máquinas industriais, programas de molde e histórico de operações, com login rastreável.</p>
       </div>
@@ -950,22 +948,22 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 
     <article class="pj" data-cursor="abrir">
       <div class="pj-face">
-        <div class="pj-meta mono"><span>Mobile</span><span>React Native · SQLite</span></div>
-        <div class="pj-cover"><svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true"><g stroke="#2A2A2A"><path d="M0 40 H400 M0 80 H400 M0 120 H400 M80 0 V160 M200 0 V160 M320 0 V160"/></g><path d="M40 140 L 120 96 L 210 110 L 300 50" fill="none" stroke="#FFFFFF" stroke-dasharray="5 5"/><circle cx="300" cy="50" r="9" fill="#FE5101"/><circle cx="120" cy="96" r="5" fill="#FFFFFF"/></svg></div>
-        <h3>Museu na Mão</h3>
-        <p>App com geolocalização, favoritos, busca e filtros para descobrir museus por perto.</p>
+        <div class="pj-meta mono"><span>Dashboard de KPIs</span><span>Power BI · SQL · ETL</span></div>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>cnh industrial · scorecard</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/bi-scorecard.webp)"></b><img src="assets/projetos/bi-scorecard.webp" width="1024" height="434" loading="lazy" decoding="async" alt="Scorecard em Power BI com metas e resultados de cada KPI mês a mês"></div></div>
+        <h3>CNH Industrial</h3>
+        <p>Dashboard de KPIs que reúne indicadores operacionais e de negócio numa só visão para a decisão gerencial.</p>
       </div>
       <div class="pj-back" aria-hidden="true">
         <span class="mono">Arquitetura</span>
-        <ol class="flow"><li><em>01</em>react native · autenticação</li><li><em>02</em>google places api · lugares próximos</li><li><em>03</em>wikipedia api · conteúdo</li><li><em>04</em>sqlite · favoritos offline</li></ol>
-        <p class="big">iOS + Android</p>
+        <ol class="flow"><li><em>01</em>extração via sql</li><li><em>02</em>etl · consistência e confiabilidade</li><li><em>03</em>modelagem de dados · performance</li><li><em>04</em>power bi · filtros dinâmicos e indicadores</li></ol>
+        <p class="big">Uma visão, várias áreas</p>
       </div>
     </article>
 
     <article class="pj" data-cursor="abrir">
       <div class="pj-face">
         <div class="pj-meta mono"><span>IoT · Tempo real</span><span>Node · WebSockets · ESP32</span></div>
-        <div class="pj-cover"><svg viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true"><path d="M0 100 L40 92 L80 98 L120 80 L160 86 L200 70 L240 74 L260 140 L280 140 L300 76 L340 68 L400 60" fill="none" stroke="#FE5101" stroke-width="2"/><rect x="250" y="20" width="40" height="130" fill="#FF4D3A" opacity=".14"/><text x="270" y="16" fill="#FF4D3A" font-size="10" font-family="monospace" text-anchor="middle">OFFLINE</text></svg></div>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>metabee · impressoras 3d</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/impressoras-metabee.webp)"></b><img src="assets/projetos/impressoras-metabee.webp" width="1145" height="555" loading="lazy" decoding="async" alt="Painel de monitoramento de impressoras 3D com status de cada máquina"></div></div>
         <h3>Impressoras 3D</h3>
         <p>Painel em tempo real com KPIs de cada máquina e detecção automática de equipamento offline.</p>
       </div>
@@ -976,17 +974,31 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
       </div>
     </article>
 
-    <article class="pj wide" data-cursor="abrir">
+    <article class="pj" data-cursor="abrir">
       <div class="pj-face">
         <div class="pj-meta mono"><span>Business Intelligence</span><span>Power BI · DAX · Power Query</span></div>
-        <div class="pj-cover"><svg viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden="true"><g fill="#2A2A2A"><rect x="20" y="20" width="170" height="50" rx="3"/><rect x="210" y="20" width="170" height="50" rx="3"/><rect x="400" y="20" width="170" height="50" rx="3"/></g><g fill="#2A2A2A"><rect x="600" y="20" width="18" height="120"/><rect x="630" y="60" width="18" height="80"/><rect x="660" y="40" width="18" height="100"/><rect x="690" y="80" width="18" height="60"/></g><rect x="720" y="30" width="18" height="110" fill="#FE5101"/><path d="M20 140 C 140 120, 260 130, 380 100 S 520 90, 570 80" fill="none" stroke="#FE5101" stroke-width="2"/></svg></div>
-        <h3>Dashboards Financeiro, Produção e RH</h3>
-        <p>Filtros dinâmicos, hierarquias e medidas DAX, com dicionário de dados e regras de negócio documentadas.</p>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>power bi · financeiro</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/bi-financeiro.webp)"></b><img src="assets/projetos/bi-financeiro.webp" width="1388" height="775" loading="lazy" decoding="async" alt="Dashboard financeiro em Power BI com recebimentos, margem e lucro por mês"></div></div>
+        <h3>Dashboard Financeiro</h3>
+        <p>Recebimentos, pagamentos, impostos e lucro por banco, com a margem e o lucro de cada mês em cascata.</p>
       </div>
       <div class="pj-back" aria-hidden="true">
         <span class="mono">Arquitetura</span>
-        <ol class="flow"><li><em>01</em>levantamento de KPIs com gestores</li><li><em>02</em>sql + python · limpeza e consolidação</li><li><em>03</em>modelo estrela · relacionamentos</li><li><em>04</em>medidas DAX · hierarquias</li></ol>
+        <ol class="flow"><li><em>01</em>power query · movimentações</li><li><em>02</em>modelo de dados · relacionamentos</li><li><em>03</em>medidas DAX · margem e lucro</li><li><em>04</em>cascata · lucro por mês</li></ol>
         <p class="big">Decisão em 5 segundos</p>
+      </div>
+    </article>
+
+    <article class="pj" data-cursor="abrir">
+      <div class="pj-face">
+        <div class="pj-meta mono"><span>Game dev</span><span>Python · Pygame · POO</span></div>
+        <div class="pj-cover pj-shot"><div class="pj-bar" aria-hidden="true"><i></i><i></i><i></i><span>crossword's heaven · menu</span></div><div class="pj-view"><b style="background-image:url(assets/projetos/jogo-crossword.webp)"></b><img src="assets/projetos/jogo-crossword.webp" width="791" height="592" loading="lazy" decoding="async" alt="Menu do jogo Crossword's Heaven em pixel art, com modo versus e modo história"></div></div>
+        <h3>Crossword's Heaven</h3>
+        <p>RPG de perguntas e respostas em pixel art: cada resposta certa vira golpe numa batalha por turnos.</p>
+      </div>
+      <div class="pj-back" aria-hidden="true">
+        <span class="mono">Arquitetura</span>
+        <ol class="flow"><li><em>01</em>python + pygame · loop do jogo e cenas</li><li><em>02</em>orientação a objetos · heróis e inimigos</li><li><em>03</em>banco de perguntas e respostas</li><li><em>04</em>batalha por turnos · acerto = golpe</li></ol>
+        <p class="big">Modo história + versus</p>
       </div>
     </article>
 

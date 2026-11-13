@@ -623,7 +623,78 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important
 @media (prefers-reduced-motion:reduce){
   html:not(.mo) *,html:not(.mo) *::before,html:not(.mo) *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+/* ---------- loading screen ---------- */
+.ld{position:fixed;inset:0;z-index:200;background:#050505;display:grid;place-items:center;overflow:hidden;animation:ldSafe 0s 14s forwards}
+@keyframes ldSafe{to{visibility:hidden;opacity:0;pointer-events:none}}
+.ld-bg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ld::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(42% 46% at 50% 50%,rgba(5,5,5,.9),rgba(5,5,5,.45) 55%,transparent 82%)}
+.ld-mid{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:24px}
+.ld-mid>*{animation:ldUp 1s var(--ease) both}
+.ld-mid>:nth-child(2){animation-delay:.12s}.ld-mid>:nth-child(3){animation-delay:.22s}.ld-mid>:nth-child(4){animation-delay:.34s}
+@keyframes ldUp{from{opacity:0;transform:translateY(26px)}}
+.ld-logo{width:clamp(92px,10vw,128px);height:clamp(92px,10vw,128px)}
+.ld-name{margin:0;font-family:var(--f-display);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(34px,5.6vw,76px);line-height:.88;letter-spacing:-.035em;text-transform:uppercase}
+.ld-name span{color:var(--lime)}
+.ld-sub{margin:-6px 0 14px;color:var(--mute);font-size:11px}
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+.ld-go{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;justify-content:space-between;gap:18px;min-width:256px;height:66px;padding:0 10px 0 30px;border-radius:999px;cursor:pointer;isolation:isolate;
+  font:600 12px/1 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--fg);background:rgba(12,12,12,.85);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 22px 50px -22px rgba(254,81,1,.55);transition:color .35s}
+.ld-go:disabled{cursor:progress}
+.ld-go::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;z-index:-1;
+  background:conic-gradient(from var(--ang),rgba(254,81,1,0) 0deg,rgba(254,81,1,0) 190deg,#FE5101 285deg,#FFD7C2 318deg,#FE5101 338deg,rgba(254,81,1,0) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:ldSpin 2.6s linear infinite}
+@keyframes ldSpin{to{--ang:360deg}}
+.ld-fill{position:absolute;inset:0;border-radius:inherit;overflow:hidden;z-index:-1}
+.ld-fill::before{content:"";position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0) * 100%);background:linear-gradient(90deg,rgba(254,81,1,.04),rgba(254,81,1,.3));transition:opacity .5s}
+.ld-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#FF8A50,#FE5101 55%);clip-path:circle(0px at calc(100% - 33px) 50%);transition:clip-path .65s var(--ease)}
+.ld-go.ready .ld-fill::before{opacity:0}
+.ld-go.ready:hover .ld-fill::after,.ld-go.ready:focus-visible .ld-fill::after{clip-path:circle(160% at calc(100% - 33px) 50%)}
+.ld-go.ready:hover,.ld-go.ready:focus-visible{color:var(--lime-ink)}
+.ld-go.ready{animation:ldBreath 2.6s ease-in-out infinite}
+@keyframes ldBreath{50%{box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 24px 64px -14px rgba(254,81,1,.8)}}
+.ld-lbl{display:flex;align-items:center;gap:12px}
+.ld-roll{position:relative;display:block;overflow:hidden;height:1.2em;line-height:1.2em}
+.ld-roll span{display:block;transition:transform .55s var(--ease)}
+.ld-roll span+span{position:absolute;left:0;top:100%}
+.ld-go.ready:hover .ld-roll span,.ld-go.ready:focus-visible .ld-roll span{transform:translateY(-100%)}
+.ld-pct{font-weight:500;color:var(--lime);min-width:4ch;text-align:left;font-variant-numeric:tabular-nums}
+.ld-go.ready .ld-pct{display:none}
+.ld-arrow{position:relative;width:46px;height:46px;flex:none;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:#181818;color:var(--lime);transition:background .35s,color .35s}
+.ld-arrow svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .3s}
+.ld-arrow::before{content:"";position:absolute;width:18px;height:18px;border-radius:50%;border:2px solid rgba(254,81,1,.22);border-top-color:#FE5101;animation:ldRot .8s linear infinite}
+@keyframes ldRot{to{transform:rotate(360deg)}}
+.ld-go.ready .ld-arrow{background:var(--lime);color:var(--lime-ink)}
+.ld-go.ready .ld-arrow::before{display:none}
+.ld-go.ready .ld-arrow svg{opacity:1}
+.ld-go.ready:hover .ld-arrow,.ld-go.ready:focus-visible .ld-arrow{background:var(--lime-ink);color:var(--lime)}
+.ld-go.ready:hover .ld-arrow svg,.ld-go.ready:focus-visible .ld-arrow svg{animation:ldArrow .7s var(--ease)}
+@keyframes ldArrow{45%{transform:translateX(160%)}46%{transform:translateX(-160%)}100%{transform:none}}
+.ld-go:focus-visible{outline:2px solid var(--fg);outline-offset:5px}
+.ld-foot{position:absolute;z-index:1;left:0;right:0;bottom:max(22px,env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;gap:16px;padding-inline:var(--gut);color:var(--mute);font-size:11px;animation:ldUp 1s .5s var(--ease) both}
+.ld-wipe{position:fixed;inset:0;z-index:210;display:none;pointer-events:none}
+.ld-wipe i{position:absolute;top:0;bottom:0;width:calc(20% + 1px);transform:scaleY(0)}
+.ld-wipe i:nth-child(1){left:0;background:#FE5101}.ld-wipe i:nth-child(2){left:20%;background:#F64E00}.ld-wipe i:nth-child(3){left:40%;background:#FE5101}
+.ld-wipe i:nth-child(4){left:60%;background:#F64E00}.ld-wipe i:nth-child(5){left:80%;background:#FE5101}
+.ld-mark{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;color:#0A0A0A}
+.ld-mark .lm-logo{width:clamp(86px,9vw,116px);height:clamp(86px,9vw,116px)}
+.ld-mark .lm-logo .lm-mono path,.ld-mark .lm-logo .lm-hair ellipse{fill:#0A0A0A;stroke:#FE5101}
+.ld-mark b{font-family:var(--f-display);font-variation-settings:'wdth' 125;font-weight:900;font-size:clamp(30px,5vw,66px);line-height:.88;letter-spacing:-.035em;text-transform:uppercase}
+@media (max-width:560px){.ld-go{min-width:228px;height:60px;padding-left:24px}.ld-arrow{width:42px;height:42px}.ld-foot{font-size:10px}}
 </style>
+
+<!-- LOADING SCREEN -->
+<div class="ld" id="loader" role="dialog" aria-modal="true" aria-label="Abertura do portfólio">
+  <canvas class="ld-bg" aria-hidden="true"></canvas>
+  <div class="ld-mid">
+    <svg class="lm-logo ld-logo" aria-hidden="true"></svg>
+    <p class="ld-name">Luiz <span>Machado</span></p>
+    <p class="ld-sub mono">Desenvolvedor · Dados · Motion design</p>
+    <button class="ld-go" type="button" disabled><span class="ld-fill" aria-hidden="true"></span><span class="ld-lbl"><span class="ld-roll"><span>Carregando</span><span>Carregando</span></span><b class="ld-pct">0%</b></span><span class="ld-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+  </div>
+  <div class="ld-foot mono" aria-hidden="true"><span>Portfólio · 2026</span><span>Curitiba, BR</span></div>
+</div>
+<div class="ld-wipe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><div class="ld-mark"><svg class="lm-logo" aria-hidden="true"></svg><b>Bora construir</b></div></div>
 
 <!-- CURSOR -->
 <div class="cur cur-dot" aria-hidden="true"></div>
@@ -1231,6 +1302,72 @@ if(!RM&&window.Lenis){
   gsap.ticker.add(t=>lenis.raf(t*1000));
   gsap.ticker.lagSmoothing(0);
 }
+
+/* ---- loading screen: the tile field, the real progress, the start button and the wipe that opens the page ---- */
+const LD={on:false,wait:Promise.resolve()};
+(()=>{
+  const ld=$('#loader');if(!ld)return;
+  ld.style.animation='none';                                   // the CSS failsafe is only for a page whose script never ran
+  let open;LD.on=true;LD.wait=new Promise(r=>open=r);
+  lenis&&lenis.stop();
+  const block=e=>{if(LD.on)e.preventDefault()};
+  ld.addEventListener('wheel',block,{passive:false});ld.addEventListener('touchmove',block,{passive:false});
+  addEventListener('keydown',e=>{if(LD.on&&!(e.key===' '&&e.target===go)&&[' ','PageDown','PageUp','ArrowDown','ArrowUp','Home','End'].includes(e.key))e.preventDefault()});
+  // the background: tiles lit by the flame from the top-left corner, pulses rising out of the logo, a glow under the pointer
+  const cv=$('.ld-bg',ld),cx=cv.getContext('2d');let W=0,H=0,cs=20,cols=0,rows=0;
+  const size=()=>{const d=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+    cs=Math.max(14,Math.min(26,W/62));cols=Math.ceil(W/cs)+1;rows=Math.ceil(H/cs)+1};
+  size();addEventListener('resize',size);
+  let mx=-1e4,my=-1e4,run=true,fc=0,lastP=-9;const t0=performance.now(),pulses=[];
+  ld.addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
+  const LV=14,COL=[...Array(LV)].map((_,i)=>{const f=(i+1)/LV;return i===LV-1?'#FF8A50':`rgba(254,81,1,${(.07+.93*Math.pow(f,1.5)).toFixed(3)})`});
+  function frame(now){
+    if(!run)return;requestAnimationFrame(frame);
+    if((LOW||LITE)&&(++fc&1))return;                          // half rate on weak devices
+    const t=(now-t0)/1000;if(t-lastP>2.6){pulses.push(t);lastP=t;if(pulses.length>3)pulses.shift()}
+    cx.clearRect(0,0,W,H);const P=[...Array(LV)].map(()=>new Path2D()),ox=W/2,oy=H/2,dg=Math.hypot(W,H),mn=Math.min(W,H);
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const x=c*cs,y=r*cs;
+      const d=(x*.8+y*.6)/dg;let v=Math.max(0,1-d*1.8)*(.72+.28*Math.sin(t*.9-d*7));
+      v+=.09*(Math.sin(x*.012+t*.6)*Math.sin(y*.016-t*.45)+1);
+      const dc=Math.hypot(x-ox,y-oy);
+      for(const q of pulses){const age=t-q,k=1-Math.abs(dc-age*dg*.26)/(cs*2.6);if(k>0)v+=k*.6*Math.max(0,1-age/3.6)}
+      const dm=Math.hypot(x-mx,y-my);if(dm<210)v+=(1-dm/210)*.65;
+      v*=Math.min(1,.3+dc/(mn*.5));if(v<.07)continue;v=Math.min(1,v);
+      const sz=(cs-3)*(.3+.7*v),o=(cs-sz)/2;P[Math.min(LV-1,v*LV|0)].rect(x+o,y+o,sz,sz)}
+    for(let i=0;i<LV;i++){cx.fillStyle=COL[i];cx.fill(P[i])}
+    if(RM)run=false}
+  requestAnimationFrame(frame);
+  // progress: fonts, the hero atlas and the page itself; it never flashes past (≥1.3 s) and never hangs (9 s)
+  const go=$('.ld-go',ld),pct=$('.ld-pct',ld),fill=$('.ld-fill',ld),rolls=$$('.ld-roll span',ld);
+  const jobs=[document.fonts?document.fonts.ready:Promise.resolve(),
+    new Promise(r=>{const im=new Image();im.onload=im.onerror=r;im.src='assets/luiz-giro-2.webp'}),
+    new Promise(r=>document.readyState==='complete'?r():addEventListener('load',r,{once:true}))];
+  let target=0,shown=0,n=0;const ts=performance.now();
+  jobs.forEach(j=>j.then(()=>{target=++n/jobs.length}));setTimeout(()=>target=1,9000);
+  (function prog(){const cap=Math.min(1,(performance.now()-ts)/1300);shown+=(Math.min(target,cap)-shown)*.12;
+    const v=Math.round(shown*100);pct.textContent=v+'%';fill.style.setProperty('--p',shown.toFixed(3));
+    if(target>=1&&shown>.995)return ready();setTimeout(prog,30)})();
+  function ready(){pct.textContent='100%';rolls.forEach(r=>r.textContent='Iniciar');go.disabled=false;go.classList.add('ready');go.setAttribute('aria-label','Iniciar');
+    try{go.focus({preventScroll:true})}catch(_){}}
+  // a little magnetic pull
+  if(FINE){go.addEventListener('pointermove',e=>{const b=go.getBoundingClientRect();gsap.to(go,{x:(e.clientX-b.left-b.width/2)*.18,y:(e.clientY-b.top-b.height/2)*.3,duration:.4,ease:'power3.out'})});
+    go.addEventListener('pointerleave',()=>gsap.to(go,{x:0,y:0,duration:.8,ease:'elastic.out(1,.45)'}))}
+  go.addEventListener('click',()=>{if(!LD.on||go.disabled||go.dataset.go)return;go.dataset.go='1';
+    const wipe=$('.ld-wipe'),bars=$$('i',wipe),mark=$('.ld-mark',wipe);
+    const finish=()=>{run=false;scrollTo(0,0);lenis&&lenis.scrollTo(0,{immediate:true,force:true});ld.style.display='none';LD.on=false;lenis&&lenis.start();document.body.classList.remove('cur-link');open()};
+    if(RM){gsap.to(ld,{opacity:0,duration:.4,onComplete:finish});return}
+    wipe.style.display='block';
+    gsap.timeline()
+      .to(go,{scale:.9,duration:.12,ease:'power2.out'})
+      .to(go,{scale:1,duration:.35,ease:'back.out(3)'})
+      .to('.ld-mid,.ld-foot',{scale:.94,opacity:0,duration:.5,ease:'power2.in'},.12)
+      .fromTo(bars,{scaleY:0,transformOrigin:'50% 100%'},{scaleY:1,duration:.7,stagger:.07,ease:'power4.inOut'},.18)
+      .fromTo(mark,{opacity:0,scale:.86,y:20},{opacity:1,scale:1,y:0,duration:.55,ease:'back.out(1.7)'},'-=.25')
+      .add(finish,'+=.25')
+      .to(mark,{opacity:0,y:-36,duration:.4,ease:'power2.in'},'<')
+      .to(bars,{scaleY:0,transformOrigin:'50% 0%',duration:.8,stagger:.07,ease:'power4.inOut'},'<.12')
+      .set(wipe,{display:'none'})});
+})();
 const goTo=y=>{lenis?lenis.scrollTo(y,{duration:1.9,easing:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}):scrollTo({top:y,behavior:RM?'auto':'smooth'})};
 $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=$(a.getAttribute('href'));if(!t)return;e.preventDefault();const sp=t.parentElement.classList.contains('pin-spacer')?t.parentElement:t;goTo(sp.getBoundingClientRect().top+scrollY)}));
 
@@ -1553,7 +1690,7 @@ void main(){
   let lt=performance.now(),hf=0,hrc=null,frc=null,hsy=-1,hk=0;const t0=lt;addEventListener('resize',()=>hrc=null);
   gsap.ticker.add(()=>{
     const now=performance.now(),dt=Math.min(.05,(now-lt)/1000);lt=now;
-    if(!ready||!heroVis)return;
+    if(!ready||!heroVis||LD.on)return;
     if(!dragging){
       av+=(SPIN-av)*(1-Math.pow(.22,dt));                    // a throw slows down into my own slow turn
       ang+=av*dt}
@@ -1575,7 +1712,7 @@ void main(){
 if(!giroOn){gc&&gc.remove();gHint&&gHint.remove();G.intro=1}
 if(!RM){
   // entrance
-  gsap.timeline(diveOn?{scrollTrigger:{trigger:heroEl,start:'top 60%'}}:{delay:.1})
+  const heroIn=gsap.timeline(diveOn?{scrollTrigger:{trigger:heroEl,start:'top 60%'}}:{delay:.1,paused:LD.on})
     .from('.figure',{opacity:0,duration:1.6,ease:'power2.out'})
     .to(G,{intro:1,duration:1.8,ease:'power2.inOut'},'<')
     .fromTo('.hero-glow',{opacity:0},{opacity:1,duration:2,ease:'power2.out'},'<')
@@ -1584,6 +1721,7 @@ if(!RM){
     .fromTo('.hero-social a',{opacity:0,x:14},{opacity:1,x:0,duration:.7,stagger:.08,ease:'power3.out',clearProps:'opacity,transform'},'<.5')
     .fromTo('.hc-stats > div',{opacity:0,y:30},{opacity:1,y:0,duration:.9,stagger:.12,ease:'power3.out',clearProps:'opacity,transform'},'<')
     .fromTo('.hero-word span',{yPercent:60,opacity:0},{yPercent:0,opacity:1,duration:1.4,ease:'power4.out',clearProps:'opacity,transform'},'<-.6');
+  if(LD.on)LD.wait.then(()=>heroIn.play(0));
   // scroll away
   // the opening holds still for the first scroll, then winds down in place before handing over to the manifesto
   (function(){const w=$('.hero-word'),sp=w&&w.firstElementChild;if(!sp)return;
